@@ -1,2 +1,2 @@
 # hyprdashboard-qt6
-Dashboard / Launcher for hyperland
+Dashboard / Launcher for hyprland
