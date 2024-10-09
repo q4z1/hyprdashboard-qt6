@@ -14,8 +14,10 @@
 
 #include <QDebug>
 
+#include <include/config/globals.h>
 #include <include/socket/client.h>
 #include <include/socket/server.h>
+#include <include/processor/processor.h>
 
 bool isServer = false;
 bool isRunning = false;
@@ -58,11 +60,12 @@ int main(int argc, char *argv[])
     localClient->disconnect();
     delete localClient;
 
-
-    
-
     if(!isRunning && (isServer || argc < 2)) {
         Server *localServer = new Server(appName);
+        Processor *processor = new Processor();
+        QJsonObject userData = processor->getUserData(true);
+
+        qDebug() << "User: " << userData["user"] << " : "<< userData["desc"] << " : " << userData["home"] << " : " << userData["shell"];
 
         QObject::connect(localServer, &Server::quitReceived, QCoreApplication::instance(), &QCoreApplication::quit);
 

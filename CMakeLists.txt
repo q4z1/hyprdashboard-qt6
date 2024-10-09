@@ -6,7 +6,10 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Quick QuickControls2)
 
 qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
-    hyprdash.cpp
+    main.cpp
+    include/config/globals.h
+    include/processor/processor.h
+    include/processor/processor.cpp
     include/socket/server.h
     include/socket/server.cpp
     include/socket/client.h
@@ -23,8 +26,11 @@ qt_add_qml_module(hyprdash
     NO_RESOURCE_TARGET_PATH
     QML_FILES
         "hyprdash.qml"
+        "components/Box.qml"
+        "components/User.qml"
         ${qml_singletons}
     RESOURCES
+        "components/qmldir"
         "config/qmldir"
         "resources/bg.png"
         "resources/hyprdash.ttf"
