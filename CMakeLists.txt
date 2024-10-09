@@ -3,10 +3,14 @@ project(hyprdashboard_qt6 LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Quick QuickControls2)
 
 qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     hyprdash.cpp
+    include/socket/server.h
+    include/socket/server.cpp
+    include/socket/client.h
+    include/socket/client.cpp
 )
 
 set(qml_singletons
@@ -29,15 +33,13 @@ qt_add_qml_module(hyprdash
 target_link_libraries(hyprdash PUBLIC
     Qt6::Core
     Qt6::Gui
+    Qt6::Network
     Qt6::Quick
     Qt6::QuickControls2
 )
 
 if(UNIX AND NOT APPLE AND CMAKE_CROSSCOMPILING)
     find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
-
-    # Work around QTBUG-86533
-    target_link_libraries(galleryexample PRIVATE Qt6::QuickTemplates2)
 endif()
 
 install(TARGETS hyprdash
@@ -46,11 +48,11 @@ install(TARGETS hyprdash
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-#qt_generate_deploy_qml_app_script(
-#    TARGET pokerth
-#    OUTPUT_SCRIPT deploy_script
-#    MACOS_BUNDLE_POST_BUILD
-#    NO_UNSUPPORTED_PLATFORM_ERROR
-#    DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
-#)
-#install(SCRIPT ${deploy_script})
+qt_generate_deploy_qml_app_script(
+   TARGET hyprdash
+   OUTPUT_SCRIPT deploy_script
+   MACOS_BUNDLE_POST_BUILD
+   NO_UNSUPPORTED_PLATFORM_ERROR
+   DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
+)
+install(SCRIPT ${deploy_script})
