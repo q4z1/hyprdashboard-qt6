@@ -35,7 +35,7 @@ void Server::receiveArgv(QLocalSocket* client)
         qDebug() << "Toggle dashboard received.";
         emit dashReceived();
     }else{
-        qDebug() << cmd << " unknow.";
+        qDebug() << cmd << " unknown.";
     }
     client->disconnectFromServer();
     client->deleteLater();

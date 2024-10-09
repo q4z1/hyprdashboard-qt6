@@ -26,6 +26,10 @@ qt_add_qml_module(hyprdash
         ${qml_singletons}
     RESOURCES
         "config/qmldir"
+        "resources/bg.png"
+        "resources/hyprdash.ttf"
+        "resources/profile.jpg"
+        "resources/cq_mono.otf"
         "qmldir"
         "qtquickcontrols2.conf"
 )

@@ -16,8 +16,12 @@ QtObject {
         }
     }
 
-    // readonly property QtObject loadedFont: FontLoader {
-    //     source: "../resources/Rubik-VariableFont_wght.ttf"
-    // }
+    readonly property QtObject iconFont: FontLoader {
+        source: "../resources/hyprdash.ttf"
+    }
+
+    readonly property QtObject textFont: FontLoader {
+        source: "../resources/cq_mono.otf"
+    }
 
 }
