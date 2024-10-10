@@ -92,11 +92,142 @@ Window {
 
             ColumnLayout {
                 objectName: "dashboardContent"
-                RowLayout {
-                    Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: parent.height
 
-                    User { }
+                RowLayout {
+                    spacing: 15
+                    // profile, clock & weather
+
+                    User {}
+
+                    ColumnLayout {
+                        id: apps
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
+                        Layout.preferredWidth: 280
+                        Layout.minimumHeight: 320
+                        spacing: 15
+
+                        ClockBox { }
+                        
+                        Box {
+                            id: appsBox
+                            Layout.minimumWidth: parent.width
+                            Layout.minimumHeight: 240
+
+                            Rectangle {
+                                color: "transparent"
+                                anchors.fill: parent
+                                anchors.margins: 16
+
+                                GridLayout {
+                                    columnSpacing: 16
+                                    rowSpacing: 16
+                                    columns: 3
+
+                                    // whatsapp
+                                    AppLauncher {
+                                        id: whatsapp
+                                        imageS: "../resources/whatsapp.svg"
+                                        target: "chromium"
+                                        args: "--profile-directory=Default --app-id=hnpfjngllnobngcgfapefoaidbinmjnm"
+                                    }
+
+                                    // terminal
+                                    AppLauncher {
+                                        id: terminal
+                                        imageS: "../resources/terminal.svg"
+                                        target: "kitty"
+                                    }
+
+                                    // discord
+                                    AppLauncher {
+                                        id: discord
+                                        imageS: "../resources/discord.svg"
+                                        target: "discord"
+                                    }
+
+                                    // firefox
+                                    AppLauncher {
+                                        id: firefox
+                                        imageS: "../resources/firefox.svg"
+                                        target: "firefox"
+                                    }
+
+                                    // code
+                                    AppLauncher {
+                                        id: code
+                                        imageS: "../resources/code.svg"
+                                        target: "code"
+                                    }
+
+                                    // gimp
+                                    AppLauncher {
+                                        id: gimp
+                                        imageS: "../resources/gimp.svg"
+                                        target: "gimp"
+                                    }
+
+                                    // inkscape
+                                    AppLauncher {
+                                        id: incscape
+                                        imageS: "../resources/inkscape.svg"
+                                        target: "inkscape"
+                                    }
+
+                                    // nnn
+                                    AppLauncher {
+                                        id: nnn
+                                        imageS: "../resources/files.svg"
+                                        target: "kitty"
+                                        args: "-e nnn ~"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                RowLayout {
+                    id: launchers
+                    spacing: 15
+
+                    // netflix
+                    TileLauncher {
+                        id: netflix
+                        colorB: "#000000"
+                        imageS: "../resources/netflix.svg"
+                        target: "https://www.netflix.com"
+                    }
+
+                    // geforcenow
+                    TileLauncher {
+                        id: geforcenow
+                        colorB: "#000000"
+                        imageS: "../resources/geforcenow.jpg"
+                        imageW: 145
+                        imageH: 145
+                        target: "chromium"
+                        args: "--profile-directory=Default --app-id=egmafekfmcnknbdlbfbhafbllplmjlhn"
+                    }
+
+                    // tagesschau
+                    TileLauncher {
+                        id: tagesschau
+                        colorB: "#dddddd"
+                        imageS: "../resources/tagesschau.svg"
+                        imageW: 145
+                        imageH: 145
+                        target: "https://tagesschau.de"
+                    }
+
+                    // scinexx
+                    TileLauncher {
+                        id: scinexx
+                        colorB: "#dddddd"
+                        imageS: "../resources/scinexx.png"
+                        imageW: 145
+                        imageH: 145
+                        target: "https://scinexx.de"
+                    }
                 }
             }
         }

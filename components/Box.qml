@@ -5,6 +5,9 @@ import "../config" as Config
 
 Item {
 
+    property alias color: box.color
+    property alias radius: box.radius
+
     Rectangle {
         id: box
         anchors.fill: parent

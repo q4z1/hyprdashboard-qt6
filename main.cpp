@@ -63,9 +63,6 @@ int main(int argc, char *argv[])
     if(!isRunning && (isServer || argc < 2)) {
         Server *localServer = new Server(appName);
         Processor *processor = new Processor();
-        QJsonObject userData = processor->getUserData(true);
-
-        qDebug() << "User: " << userData["user"] << " : "<< userData["desc"] << " : " << userData["home"] << " : " << userData["shell"];
 
         QObject::connect(localServer, &Server::quitReceived, QCoreApplication::instance(), &QCoreApplication::quit);
 
@@ -89,6 +86,10 @@ int main(int argc, char *argv[])
                 root->setProperty("visibility", QWindow::Hidden);
             }
         });
+
+        QJsonObject userData = processor->getUserData(true);
+        engine.rootContext()->setContextProperty("processor", processor);
+        engine.rootContext()->setContextProperty("userData", userData);
 
         engine.load(QUrl("qrc:/hyprdash.qml"));
         if (engine.rootObjects().isEmpty())

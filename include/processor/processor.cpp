@@ -74,6 +74,20 @@ QJsonObject& Processor::getUserData(bool update)
     return userData;
 }
 
+void Processor::launch(const QString &command, const QString &arguments)
+{
+    QProcess process;
+    QStringList args = arguments.split(u' ', Qt::SkipEmptyParts);
+    process.startDetached(command, args);
+}
+
+void Processor::openUrlExternally(const QString &url)
+{
+    QProcess process;
+    QStringList args = url.split(u' ', Qt::SkipEmptyParts);
+    process.startDetached("xdg-open", args);
+}
+
 Processor::~Processor()
 {
 }

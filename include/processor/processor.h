@@ -16,8 +16,9 @@ public:
     int& getOs(bool update = false);
     QJsonObject& getUserData(bool update = false);
 
-private slots:
-
+public slots:
+    void launch(const QString &command, const QString &args);
+    void openUrlExternally(const QString &command);
 
 signals:
 

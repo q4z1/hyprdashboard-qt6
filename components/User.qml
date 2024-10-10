@@ -67,8 +67,7 @@ Box {
             color: Config.Settings.palette.color.col800
             font.family: Config.Settings.textFont.font.family
             font.pointSize: 20
-            // font.bold: true
-            text: "Kai Philipp"
+            text: userData["desc"]
         }
 
         Text {
@@ -81,7 +80,7 @@ Box {
             font.family: Config.Settings.textFont.font.family
             font.pointSize: 16
             font.bold: true
-            text: "min"
+            text: userData["user"]
         }
     }
 }
