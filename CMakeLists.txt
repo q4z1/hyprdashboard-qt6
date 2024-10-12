@@ -33,6 +33,7 @@ qt_add_qml_module(hyprdash
         "components/Box.qml"
         "components/Clock.qml"
         "components/TileLauncher.qml"
+        "components/UpTime.qml"
         "components/User.qml"
         ${qml_singletons}
     RESOURCES

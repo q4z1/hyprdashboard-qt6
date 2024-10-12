@@ -97,8 +97,13 @@ Window {
                     spacing: 15
                     // profile, clock & weather
 
-                    // User
-                    User {}
+                    // profile & uptime
+                    ColumnLayout {
+                        spacing: 15
+                        User {}
+                        Clock { }
+                        UpTime { }
+                    }
 
                     // clock & apps 
                     ColumnLayout {
@@ -108,12 +113,11 @@ Window {
                         Layout.minimumHeight: 320
                         spacing: 15
 
-                        ClockBox { }
-                        
                         Box {
                             id: appsBox
                             Layout.minimumWidth: parent.width
                             Layout.minimumHeight: 240
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
 
                             Rectangle {
                                 color: "transparent"

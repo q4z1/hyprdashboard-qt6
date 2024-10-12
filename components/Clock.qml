@@ -15,7 +15,7 @@ Box {
     property string seconds
 
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-    Layout.minimumWidth: 280
+    Layout.minimumWidth: 256
     Layout.minimumHeight: 100
 
     RowLayout {
@@ -26,7 +26,8 @@ Box {
         Item {
             id: hoursText
             Layout.preferredWidth: parent.width / 5
-            Layout.preferredHeight: 40
+            Layout.preferredHeight: parent.height
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
 
             Text {
                 anchors.fill: parent
@@ -38,9 +39,8 @@ Box {
         }
 
         Item {
-            Layout.preferredWidth: parent.width / 4
+            Layout.preferredWidth: parent.width / 5
             Layout.preferredHeight: parent.height
-            // Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             ColumnLayout {
                 id: minutesSeconds
@@ -79,8 +79,7 @@ Box {
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: 20
                     horizontalAlignment: Text.AlignLeft
-                    // verticalAlignment: Text.AlignBottom
-                    color: Config.Settings.palette.color.col800
+                    color: Config.Settings.palette.color.col400
                     font.family: Config.Settings.textFont.font.family
                     font.pointSize: 20
                     text: clock.day

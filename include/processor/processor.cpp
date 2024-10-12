@@ -65,6 +65,29 @@ QJsonObject Processor::getUserData()
     return object;
 }
 
+QJsonObject Processor::getUpTime()
+{
+    QJsonObject object{
+        {"hours", 0},
+        {"minutes", 0}
+    };
+
+    if (getOs() == OS_LINUX)
+    {
+        QFile upFile("/proc/uptime");
+        upFile.open(QIODevice::ReadOnly);
+        QRegularExpression re = QRegularExpression("^(?<uptime>\\d+\\.\\d+).*$", QRegularExpression::DotMatchesEverythingOption);
+        QRegularExpressionMatch match = re.match(upFile.readAll());
+        if (match.hasMatch())
+        {
+            int upTime = round(match.captured("uptime").toFloat());
+            object["minutes"] = int((upTime / 60)%60);
+            object["hours"] = int(upTime / 3600);
+        }
+    }
+    return object;
+}
+
 void Processor::launch(const QString &command, const QString &arguments)
 {
     QProcess process;

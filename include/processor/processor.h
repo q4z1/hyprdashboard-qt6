@@ -14,6 +14,7 @@ public:
     Processor();
     ~Processor();
     int getOs();
+    Q_INVOKABLE QJsonObject getUpTime();
     Q_INVOKABLE QJsonObject getUserData();
 
 public slots:

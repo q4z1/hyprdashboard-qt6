@@ -9,7 +9,7 @@ QtObject {
             readonly property color col300: "#ebad27"
             readonly property color col400: "#aaac1c"
             readonly property color col500: "#77a86f"
-            readonly property color col600: "#729b8b"
+            readonly property color col600: "#88b1a1"
             readonly property color col700: "#57b6af"
             readonly property color col800: "#c8748c"
             readonly property color col900: "#cb4c7b"
