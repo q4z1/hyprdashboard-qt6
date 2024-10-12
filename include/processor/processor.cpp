@@ -36,7 +36,7 @@ QJsonObject Processor::getUserData()
         {"desc", "Fulle Name"},
         {"home", "/home/user"},
         {"shell", "/bin/bash"},
-        {"pic", "../resources/profile.pic"}
+        {"pic", "../resources/profile.jpg"}
     };
 
     if (getOs() == OS_LINUX)

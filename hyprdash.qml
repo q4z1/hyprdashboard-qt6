@@ -121,9 +121,9 @@ Window {
                                 anchors.margins: 16
 
                                 GridLayout {
-                                    columnSpacing: 16
-                                    rowSpacing: 16
-                                    columns: 3
+                                    columnSpacing: 8
+                                    rowSpacing: 12
+                                    columns: 4
 
                                     property var appLaunchers
                                     Component.onCompleted: { 
