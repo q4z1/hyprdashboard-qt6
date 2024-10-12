@@ -1,0 +1,126 @@
+{
+    "style": "Universal",
+    "userInfo": {
+        "desc": "Full Name",
+        "gid": "1234",
+        "home": "/home/user",
+        "shell": "/bin/bash",
+        "uid": "1234",
+        "user": "username",
+        "pic": "../resources/profile.jpg"
+    },
+    "tileLaunchers": [
+        {
+            "id": "geforcenow",
+            "colorB": "#000000",
+            "imageS": "../resources/geforcenow.jpg",
+            "imageW": 145,
+            "imageH": 145,
+            "target": "chromium",
+            "args": "--profile-directory=Default --app-id=egmafekfmcnknbdlbfbhafbllplmjlhn"
+        },
+        {
+            "id": "netflix",
+            "colorB": "#000000",
+            "imageS": "../resources/netflix.svg",
+            "imageW": 140,
+            "imageH": 140,
+            "target": "https://www.netflix.com"
+        },
+        {
+            "id": "tagesschau",
+            "colorB": "#dddddd",
+            "imageS": "../resources/tagesschau.svg",
+            "imageW": 145,
+            "imageH": 145,
+            "target": "https://tagesschau.de"
+        },
+        {
+            "id": "scinexx",
+            "colorB": "#dddddd",
+            "imageS": "../resources/scinexx.png",
+            "imageW": 145,
+            "imageH": 145,
+            "target": "https://scinexx.de"
+        }
+    ],
+    "appLaunchers": [
+        {
+            "id": "whatsapp",
+            "imageS": "../resources/whatsapp.svg",
+            "target": "chromium",
+            "args": "--profile-directory=Default --app-id=hnpfjngllnobngcgfapefoaidbinmjnm"
+        },
+        {
+            "id": "terminal",
+            "imageS": "../resources/terminal.svg",
+            "target": "kitty"
+        },
+        {
+            "id": "discord",
+            "imageS": "../resources/discord.svg",
+            "target": "discord"
+        },
+        {
+            "id": "firefox",
+            "imageS": "../resources/firefox.svg",
+            "target": "firefox"
+        },
+        {
+            "id": "code",
+            "imageS": "../resources/code.svg",
+            "target": "code"
+        },
+        {
+            "id": "gimp",
+            "imageS": "../resources/gimp.svg",
+            "target": "gimp"
+        },
+        {
+            "id": "inkscape",
+            "imageS": "../resources/inkscape.svg",
+            "target": "inkscape"
+        },
+        {
+            "id": "nnn",
+            "imageS": "../resources/files.svg",
+            "target": "kitty",
+            "args": "-e nnn ~"
+        }
+    ],
+    "actionButtons": [
+        {
+            "id": "logout",
+            "target": "hyprctl",
+            "args": "dispatch exit",
+            "textI": "",
+            "colorI": "color.col900",
+            "rotation": 90
+        },
+        {
+            "id": "suspend",
+            "target": "systemctl",
+            "args": "suspend",
+            "textI": "",
+            "colorI": "color.col400",
+            "sizeI": 64,
+            "rotation": 0
+        },
+        {
+            "id": "reboot",
+            "target": "systemctl",
+            "args": "reboot",
+            "textI": "",
+            "colorI": "color.col300",
+            "rotation": 0
+        },
+        {
+            "id": "poweroff",
+            "target": "systemctl",
+            "args": "poweroff",
+            "textI": "",
+            "colorI": "color.col700",
+            "rotation": 0
+        }
+    ]
+}

@@ -8,6 +8,10 @@ import "../config" as Config
 
 Box {
     id: userBox
+
+    property var userInfo
+    Component.onCompleted: { userInfo = gSettings.getValue("userInfo") }
+
     Layout.minimumWidth: 256
     Layout.minimumHeight: 320
     Layout.alignment: Qt.AlignTop;
@@ -26,7 +30,7 @@ Box {
 
             Image {
                 id: profilePic
-                source: "../resources/profile.jpg"
+                source: userInfo["pic"]
                 anchors.centerIn: parent
                 width: 172
                 height: 172
@@ -67,7 +71,7 @@ Box {
             color: Config.Settings.palette.color.col800
             font.family: Config.Settings.textFont.font.family
             font.pointSize: 20
-            text: userData["desc"]
+            text: userInfo["desc"]
         }
 
         Text {
@@ -80,7 +84,7 @@ Box {
             font.family: Config.Settings.textFont.font.family
             font.pointSize: 16
             font.bold: true
-            text: userData["user"]
+            text: userInfo["user"]
         }
     }
 }

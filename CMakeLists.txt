@@ -8,6 +8,8 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Quick QuickControls2)
 qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     main.cpp
     include/config/globals.h
+    include/config/settings.h
+    include/config/settings.cpp
     include/processor/processor.h
     include/processor/processor.cpp
     include/socket/server.h
@@ -26,6 +28,7 @@ qt_add_qml_module(hyprdash
     NO_RESOURCE_TARGET_PATH
     QML_FILES
         "hyprdash.qml"
+        "components/ActionButton.qml"
         "components/AppLauncher.qml"
         "components/Box.qml"
         "components/Clock.qml"

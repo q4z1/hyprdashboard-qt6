@@ -21,7 +21,7 @@ Server::Server(QString serverName)
     if (!localServer->listen(serverName)) {
         qDebug() << "Unable to start socket server.";
     }else {
-        qDebug() << "Socket server started.";
+        // qDebug() << "Socket server started.";
     }
 }
 
@@ -29,10 +29,10 @@ void Server::receiveArgv(QLocalSocket* client)
 {
     QString cmd = QString(client->readAll());
     if(cmd == "-q" || cmd == "--quit") {
-        qDebug() << "Quit received.";
+        // qDebug() << "Quit received.";
         emit quitReceived();
     }else if(cmd == "-d" || cmd == "--dashboard") {
-        qDebug() << "Toggle dashboard received.";
+        // qDebug() << "Toggle dashboard received.";
         emit dashReceived();
     }else{
         qDebug() << cmd << " unknown.";

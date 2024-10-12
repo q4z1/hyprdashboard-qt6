@@ -3,3 +3,4 @@ Box             Box.qml
 TileLauncher    TileLauncher.qml
 AppLauncher     AppLauncher.qml
 ClockBox        Clock.qml
+ActionButton    ActionButton.qml

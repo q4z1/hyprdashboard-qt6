@@ -4,74 +4,65 @@
 
 Processor::Processor()
 {
-    getOs(true);
 }
 
-int& Processor::getOs(bool update)
+int Processor::getOs()
 {
-    if (update)
-    {
+    int o;
 #ifdef Q_OS_LINUX
-        os = OS_LINUX;
+        o = OS_LINUX;
 #elif Q_OS_WIN
-        os = OS_WIN;
+        o = OS_WIN;
 #elif Q_OS_DARWIN
-        os = OS_MAC;
+        o = OS_MAC;
 #elif Q_OS_MACOS
-        os = OS_MAC;
+        o = OS_MAC;
 #elif Q_OS_IOS
-        os = OS_IOS;
+        o = OS_IOS;
 #elif Q_OS_ANDROID
-        os = OS_DROID;
+        o = OS_DROID;
 #else
-        os = OS_UNKNOWN;
+        o = OS_UNKNOWN;
 #endif
-    }
-    return os;
+    return o;
 }
 
-QJsonObject& Processor::getUserData(bool update)
+QJsonObject Processor::getUserData()
 {
-    if (update)
+    QJsonObject object{
+        {"user", "username"},
+        {"uid", "123"},
+        {"gid", "123"},
+        {"desc", "Fulle Name"},
+        {"home", "/home/user"},
+        {"shell", "/bin/bash"},
+        {"pic", "../resources/profile.pic"}
+    };
+
+    if (getOs() == OS_LINUX)
     {
-        QJsonObject object{
-            {"user", "n/a"},
-            {"uid", "n/a"},
-            {"gid", "n/a"},
-            {"desc", "n/a"},
-            {"home", "n/a"},
-            {"shell", "n/a"}};
-
-        if (os == OS_LINUX)
+        QFile passwdFile("/etc/passwd");
+        passwdFile.open(QIODevice::ReadOnly);
+        QTextStream in(&passwdFile);
+        QString line;
+        do
         {
-            // min:x:1000:100:Kai Philipp:/home/min:/run/current-system/sw/bin/fish
-            QFile passwdFile("/etc/passwd");
-            passwdFile.open(QIODevice::ReadOnly);
-            QTextStream in(&passwdFile);
-            QString line;
-            do
+            line = in.readLine();
+            QRegularExpression re = QRegularExpression("^" + qgetenv("LOGNAME") + ":.*:(?<uid>\\d+):(?<gid>\\d+):(?<desc>.*):(?<home>.*):(?<shell>.*)$", QRegularExpression::DotMatchesEverythingOption);
+            QRegularExpressionMatch match = re.match(line);
+            if (match.hasMatch())
             {
-                line = in.readLine();
-                QRegularExpression re = QRegularExpression("^" + qgetenv("LOGNAME") + ":.*:(?<uid>\\d+):(?<gid>\\d+):(?<desc>.*):(?<home>.*):(?<shell>.*)$", QRegularExpression::DotMatchesEverythingOption);
-                QRegularExpressionMatch match = re.match(line);
-                if (match.hasMatch())
-                {
-                    object["user"] = QString(qgetenv("LOGNAME"));
-                    object["desc"] = match.captured("desc");
-                    object["uid"] = match.captured("uid");
-                    object["gid"] = match.captured("gid");
-                    object["home"] = match.captured("home");
-                    object["shell"] = match.captured("shell");
-                    userData = object;
-                    break;
-                }
-            } while (!line.isNull());
-        }
-
-        userData = object;
-
+                object["user"] = QString(qgetenv("LOGNAME"));
+                object["desc"] = match.captured("desc");
+                object["uid"] = match.captured("uid");
+                object["gid"] = match.captured("gid");
+                object["home"] = match.captured("home");
+                object["shell"] = match.captured("shell");
+                break;
+            }
+        } while (!line.isNull());
     }
-    return userData;
+    return object;
 }
 
 void Processor::launch(const QString &command, const QString &arguments)

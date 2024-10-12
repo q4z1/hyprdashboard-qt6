@@ -97,8 +97,10 @@ Window {
                     spacing: 15
                     // profile, clock & weather
 
+                    // User
                     User {}
 
+                    // clock & apps 
                     ColumnLayout {
                         id: apps
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
@@ -123,110 +125,75 @@ Window {
                                     rowSpacing: 16
                                     columns: 3
 
-                                    // whatsapp
-                                    AppLauncher {
-                                        id: whatsapp
-                                        imageS: "../resources/whatsapp.svg"
-                                        target: "chromium"
-                                        args: "--profile-directory=Default --app-id=hnpfjngllnobngcgfapefoaidbinmjnm"
+                                    property var appLaunchers
+                                    Component.onCompleted: { 
+                                        appLaunchers = gSettings.getValue("appLaunchers") 
                                     }
 
-                                    // terminal
-                                    AppLauncher {
-                                        id: terminal
-                                        imageS: "../resources/terminal.svg"
-                                        target: "kitty"
-                                    }
-
-                                    // discord
-                                    AppLauncher {
-                                        id: discord
-                                        imageS: "../resources/discord.svg"
-                                        target: "discord"
-                                    }
-
-                                    // firefox
-                                    AppLauncher {
-                                        id: firefox
-                                        imageS: "../resources/firefox.svg"
-                                        target: "firefox"
-                                    }
-
-                                    // code
-                                    AppLauncher {
-                                        id: code
-                                        imageS: "../resources/code.svg"
-                                        target: "code"
-                                    }
-
-                                    // gimp
-                                    AppLauncher {
-                                        id: gimp
-                                        imageS: "../resources/gimp.svg"
-                                        target: "gimp"
-                                    }
-
-                                    // inkscape
-                                    AppLauncher {
-                                        id: incscape
-                                        imageS: "../resources/inkscape.svg"
-                                        target: "inkscape"
-                                    }
-
-                                    // nnn
-                                    AppLauncher {
-                                        id: nnn
-                                        imageS: "../resources/files.svg"
-                                        target: "kitty"
-                                        args: "-e nnn ~"
+                                    Repeater {
+                                        model: parent.appLaunchers
+                                        AppLauncher {
+                                            required property var modelData
+                                            objectName: modelData["id"]
+                                            imageS: modelData["imageS"]
+                                            target: modelData["target"]
+                                            args: modelData["args"] ? modelData["args"] : null
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+
+                    // actions
+                    GridLayout {
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
+                        columns: 2
+                        columnSpacing: 10
+                        rowSpacing: 10
+
+                        property var actionButtons
+                        Component.onCompleted: { 
+                            actionButtons = gSettings.getValue("actionButtons") 
+                        }
+
+                        Repeater {
+                            model: parent.actionButtons
+                            ActionButton {
+                                required property var modelData
+                                objectName: modelData["id"]
+                                textI: modelData["textI"]
+                                colorI: modelData["colorI"]
+                                sizeI: modelData["sizeI"] ? modelData["sizeI"] : 48
+                                target: modelData["target"]
+                                args: modelData["args"] ? modelData["args"] : null
+                                rotation: modelData["rotation"] ? modelData["rotation"] : 0
+                            }
+                        }
+                     }
                 }
 
+                // tile launchers
                 RowLayout {
                     id: launchers
                     spacing: 15
-
-                    // netflix
-                    TileLauncher {
-                        id: netflix
-                        colorB: "#000000"
-                        imageS: "../resources/netflix.svg"
-                        target: "https://www.netflix.com"
+                    property var tileLaunchers
+                    Component.onCompleted: { 
+                        tileLaunchers = gSettings.getValue("tileLaunchers") 
                     }
 
-                    // geforcenow
-                    TileLauncher {
-                        id: geforcenow
-                        colorB: "#000000"
-                        imageS: "../resources/geforcenow.jpg"
-                        imageW: 145
-                        imageH: 145
-                        target: "chromium"
-                        args: "--profile-directory=Default --app-id=egmafekfmcnknbdlbfbhafbllplmjlhn"
-                    }
-
-                    // tagesschau
-                    TileLauncher {
-                        id: tagesschau
-                        colorB: "#dddddd"
-                        imageS: "../resources/tagesschau.svg"
-                        imageW: 145
-                        imageH: 145
-                        target: "https://tagesschau.de"
-                    }
-
-                    // scinexx
-                    TileLauncher {
-                        id: scinexx
-                        colorB: "#dddddd"
-                        imageS: "../resources/scinexx.png"
-                        imageW: 145
-                        imageH: 145
-                        target: "https://scinexx.de"
+                    Repeater {
+                        model: launchers.tileLaunchers
+                        TileLauncher {
+                            required property var modelData
+                            objectName: modelData["id"]
+                            colorB: modelData["colorB"]
+                            imageS: modelData["imageS"]
+                            imageW: modelData["imageW"]
+                            imageH: modelData["imageH"]
+                            target: modelData["target"]
+                            args: modelData["args"] ? modelData["args"] : null
+                        }
                     }
                 }
             }

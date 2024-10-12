@@ -5,7 +5,6 @@
 #include <QLocalSocket>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QSettings>
 #include <QQuickStyle>
 #include <QIcon>
 #include <QWindow>
@@ -15,6 +14,7 @@
 #include <QDebug>
 
 #include <include/config/globals.h>
+#include <include/config/settings.h>
 #include <include/socket/client.h>
 #include <include/socket/server.h>
 #include <include/processor/processor.h>
@@ -24,10 +24,10 @@ bool isRunning = false;
 
 int main(int argc, char *argv[])
 {
-    QString appName = "hyprdash-0.1a";
+    QString appName = "hyprdash";
     QGuiApplication app(argc, argv);
-    QGuiApplication::setApplicationName(appName);
-    QGuiApplication::setOrganizationName("inquies");
+    QGuiApplication::setApplicationName(appName); // ~/.config file
+    QGuiApplication::setOrganizationName(appName); // ~/.config folder
 
     QCommandLineParser parser;
     parser.setApplicationDescription("Dashboard / Launcher for hyprland");
@@ -66,30 +66,24 @@ int main(int argc, char *argv[])
 
         QObject::connect(localServer, &Server::quitReceived, QCoreApplication::instance(), &QCoreApplication::quit);
 
-        QSettings settings;
-        if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE"))
-            QQuickStyle::setStyle(settings.value("style").toString());
-
-        const QString styleInSettings = settings.value("style").toString();
-        if (styleInSettings.isEmpty())
-            settings.setValue(QLatin1String("style"), QQuickStyle::name());
+        Settings* settings = new Settings(appName);
+        if(!settings->getValue("userInfo").isValid()) settings->addValue("userInfo", processor->getUserData());
 
         QQmlApplicationEngine engine;
    
         QObject::connect(localServer, &Server::dashReceived, QCoreApplication::instance(), [&engine]()->void{
             QObject *root = engine.rootObjects().first();
             if(root->property("visibility") == QVariant(QWindow::Hidden)) {
-                qDebug("showing dashboard.");
+                // qDebug("showing dashboard.");
                 root->setProperty("visibility", QWindow::FullScreen);
             }else {
-                qDebug("hiding dashboard.");
+                // qDebug("hiding dashboard.");
                 root->setProperty("visibility", QWindow::Hidden);
             }
         });
 
-        QJsonObject userData = processor->getUserData(true);
         engine.rootContext()->setContextProperty("processor", processor);
-        engine.rootContext()->setContextProperty("userData", userData);
+        engine.rootContext()->setContextProperty("gSettings", settings);
 
         engine.load(QUrl("qrc:/hyprdash.qml"));
         if (engine.rootObjects().isEmpty())

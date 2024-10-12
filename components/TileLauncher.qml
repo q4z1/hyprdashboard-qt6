@@ -17,7 +17,7 @@ Box {
 
     Layout.minimumWidth: 145
     Layout.minimumHeight: 145
-    Layout.alignment: Qt.AlignTop;
+    Layout.alignment: Qt.AlignTop
     color: colorB
 
     Image {

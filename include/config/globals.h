@@ -19,10 +19,5 @@
 #ifndef OS_IOS
 #define OS_IOS 5
 #endif
-
-
-
-#include <QDebug>
-
  
 #endif // GLOBALS_H
