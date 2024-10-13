@@ -51,6 +51,7 @@ qt_add_qml_module(hyprdash
         "resources/firefox.svg"
         "resources/geforcenow.jpg"
         "resources/gimp.svg"
+        "resources/gmail.svg"
         "resources/hyprdash.ttf"
         "resources/inkscape.svg"
         "resources/netflix.svg"

@@ -107,7 +107,6 @@ Window {
 
                     // weather & apps 
                     ColumnLayout {
-                        id: apps
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.preferredWidth: 280
                         Layout.minimumHeight: 320
@@ -150,6 +149,16 @@ Window {
                                 }
                             }
                         }
+                    }
+
+                    // mails
+                    ColumnLayout {
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                        Layout.preferredWidth: 280
+                        Layout.minimumHeight: 320
+                        spacing: 15
+
+                        // Mail {}
                     }
 
                     // actions
@@ -206,6 +215,7 @@ Window {
             }
         }
 
+        // settings
         Component {
             id: settings
 
@@ -225,6 +235,7 @@ Window {
             }
         }
 
+        // versionText
         Text {
             id: versionText
             width: parent.width

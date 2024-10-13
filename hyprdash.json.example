@@ -17,6 +17,24 @@
         "units": "metric",
         "lang": "de"
     },
+    "email" : {[
+        {
+            "provider": "gmail",
+            "server": "mail.server.com",
+            "port": "993",
+            "icon": "../resources/gmail.svg",
+            "user": "username",
+            "password": "password"
+        },
+        {
+            "provider": "other",
+            "server": "mail.server.com",
+            "port": "993",
+            "icon": "../resources/mail.svg",
+            "user": "username",
+            "password": "password"
+        }
+    ]},
     "tileLaunchers": [
         {
             "id": "geforcenow",

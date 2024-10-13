@@ -16,6 +16,7 @@ public:
     int getOs();
     Q_INVOKABLE QJsonObject getUpTime();
     Q_INVOKABLE QJsonObject getUserData();
+    Q_INVOKABLE QJsonObject checkMails();
 
 public slots:
     void launch(const QString &command, const QString &args);

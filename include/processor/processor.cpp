@@ -88,6 +88,21 @@ QJsonObject Processor::getUpTime()
     return object;
 }
 
+QJsonObject Processor::checkMails()
+{
+    QJsonObject object;
+
+    QSettings settings;
+
+    if(settings.value("mailbox").isValid()) {
+    
+        object = QJsonDocument::fromVariant(settings.value("mailbox")).object();
+        qDebug() << "provider: " << QJsonDocument(object).toJson(QJsonDocument::Compact);
+    }
+    
+    return object;
+}
+
 void Processor::launch(const QString &command, const QString &arguments)
 {
     QProcess process;
