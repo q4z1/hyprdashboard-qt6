@@ -7,10 +7,18 @@ import "../components"
 
 Box {
     id: upTimeBox
-    property var upTime
+
     Component.onCompleted: { 
-        upTime =  processor.getUpTime()
+        upTime = processor.getUpTime()
     }
+
+    Timer {
+        interval: 60000; running: true; repeat: true;
+        onTriggered: upTime = processor.getUpTime()
+    }
+
+    property var upTime
+
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Layout.preferredWidth: 256
     Layout.preferredHeight: 100
@@ -21,9 +29,9 @@ Box {
 
         Text{
             text: ""
-            font.pointSize: 56
-            Layout.preferredWidth: 56
-            Layout.preferredHeight: 56
+            font.pointSize: 50
+            Layout.preferredWidth: 50
+            Layout.preferredHeight: 50
             Layout.leftMargin: 5
             Layout.rightMargin: 10
             Layout.bottomMargin: 10

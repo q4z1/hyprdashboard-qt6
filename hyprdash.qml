@@ -95,29 +95,32 @@ Window {
 
                 RowLayout {
                     spacing: 15
-                    // profile, clock & weather
 
-                    // profile & uptime
+                    // user, clock, uptime
                     ColumnLayout {
                         spacing: 15
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         User {}
                         Clock { }
                         UpTime { }
                     }
 
-                    // clock & apps 
+                    // weather & apps 
                     ColumnLayout {
                         id: apps
-                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.preferredWidth: 280
                         Layout.minimumHeight: 320
                         spacing: 15
 
+                        Weather { }
+
+                        // apps
                         Box {
                             id: appsBox
                             Layout.minimumWidth: parent.width
-                            Layout.minimumHeight: 240
-                            Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
+                            Layout.minimumHeight: 215
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
                             Rectangle {
                                 color: "transparent"
@@ -151,7 +154,7 @@ Window {
 
                     // actions
                     GridLayout {
-                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         columns: 2
                         columnSpacing: 10
                         rowSpacing: 10
@@ -213,7 +216,7 @@ Window {
                     Layout.preferredHeight: parent.height
 
                     Box {
-                        id: userBox
+                        id: settingsBox
                         Layout.preferredWidth: parent.width
                         Layout.preferredHeight: parent.height
                         Layout.alignment: Qt.AlignTop;

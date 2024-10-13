@@ -9,6 +9,14 @@
         "user": "username",
         "pic": "../resources/profile.jpg"
     },
+    "openWeather": {
+        "apiUrl": "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={apiKey}&units={units}&lang={lang}",
+        "apiKey": "abcdef0123456789",
+        "lat": "1.00",
+        "lon": "1.00",
+        "units": "metric",
+        "lang": "de"
+    },
     "tileLaunchers": [
         {
             "id": "geforcenow",

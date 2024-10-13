@@ -14,7 +14,7 @@ Box {
 
     Layout.minimumWidth: 256
     Layout.minimumHeight: 320
-    Layout.alignment: Qt.AlignTop;
+    Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
     ColumnLayout {
         anchors.fill: parent

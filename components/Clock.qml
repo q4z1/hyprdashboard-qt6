@@ -8,6 +8,15 @@ import "../components"
 Box {
     id: clock
 
+    Component.onCompleted: { 
+        clock.timeChanged()
+    }
+
+    Timer {
+        interval: 1000; running: true; repeat: true;
+        onTriggered: clock.timeChanged()
+    }
+    
     property string day
     property string date
     property string hours
@@ -27,7 +36,7 @@ Box {
             id: hoursText
             Layout.preferredWidth: parent.width / 5
             Layout.preferredHeight: parent.height
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop;
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
             Text {
                 anchors.fill: parent
@@ -48,7 +57,7 @@ Box {
 
                 Text {
                     Layout.preferredHeight: 16
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                     color: Config.Settings.palette.color.col300
                     font.family: Config.Settings.textFont.font.family
                     font.pointSize: 16
@@ -89,7 +98,6 @@ Box {
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: 16
                     horizontalAlignment: Text.AlignRight
-                    // verticalAlignment: Text.AlignTop
                     color: Config.Settings.palette.color.col200
                     font.family: Config.Settings.textFont.font.family
                     font.pointSize: 16
@@ -106,12 +114,6 @@ Box {
         seconds = (d.getSeconds() < 10) ? "0" + d.getSeconds() : d.getSeconds()
         day = d.toLocaleDateString(Qt.locale(), 'dddd,');   
         date = d.toLocaleDateString(Qt.locale(), 'dd.MM.yy');   
-        // console.log(hours + ":" + minutes + ":" + seconds)
-    }
-
-    Timer {
-        interval: 1000; running: true; repeat: true;
-        onTriggered: clock.timeChanged()
     }
 }
 
