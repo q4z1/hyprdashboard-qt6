@@ -31,8 +31,8 @@ Box {
         pressureText.text = "AP: " + weather.main.pressure + "hPa"
         humidityText.text = "Humidity: " + weather.main.humidity + "%"
         windText.text = "Wind: " + weather.wind.speed + "m/s"
-        sunRiseText.text = "Sunrise: "  + new Date(weather.sys.sunrise * 1000).toTimeString()
-        sunSetText.text = "Sunset: " + new Date(weather.sys.sunset * 1000).toTimeString()
+        sunRiseText.text = "Sunrise: "  + new Date(weather.sys.sunrise * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        sunSetText.text = "Sunset: " + new Date(weather.sys.sunset * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
     }
 
 
@@ -51,7 +51,7 @@ Box {
 
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Layout.preferredWidth: 280
-    Layout.minimumHeight: 320
+    Layout.preferredHeight: 303
     
     ColumnLayout{
         id: weatherContent
@@ -97,7 +97,7 @@ Box {
             Layout.fillHeight: true
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignTop
-            color: Config.Settings.palette.accent.col300
+            color: Config.Settings.palette.color.col700
             font.family: Config.Settings.textFont.font.family
             font.pointSize: 18
         }
@@ -158,9 +158,8 @@ Box {
                 Layout.preferredWidth: parent.width / 2
                 spacing: 4
 
-
                 Text {
-                    id: humidityText
+                    id: pressureText
                     Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                     Layout.preferredWidth: parent.width
                     horizontalAlignment: Text.AlignRight
@@ -170,7 +169,7 @@ Box {
                     font.pointSize: 12
                 }
                 Text {
-                    id: pressureText
+                    id: humidityText
                     Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                     Layout.preferredWidth: parent.width
                     horizontalAlignment: Text.AlignRight

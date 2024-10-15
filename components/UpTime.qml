@@ -14,7 +14,7 @@ Box {
             upTime = processor.getUpTime()
             upHours.text = upTime["hours"]
             upMinutes.text = upTime["minutes"]
-            // console.log(JSON.stringify(mails))
+            // console.log(JSON.stringify(upTime))
         }
     }
 

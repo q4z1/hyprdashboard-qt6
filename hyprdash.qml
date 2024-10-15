@@ -18,6 +18,10 @@ Window {
     title: qsTr("hyprdashboard - v0.1 alpha")
     color: "transparent"
 
+    Component.onCompleted: { 
+        console.log("hyprdash.qml loaded.")
+    }
+
     readonly property bool portraitMode: Screen.width < Screen.height
 
     Shortcut {
@@ -31,10 +35,10 @@ Window {
     }
 
     Shortcut {
-        sequence: "Alt+S"
+        sequence: "Alt+O"
         context: Qt.ApplicationShortcut
         onActivated: {
-            console.log("Alt+S pressed.")
+            console.log("Alt+O pressed.")
             if(dashboardStackView.depth > 1) dashboardStackView.pop()
             else dashboardStackView.push(settings)
         }
@@ -50,32 +54,32 @@ Window {
         }
 
         // settings button
-        Text {
-            id: settingsText
-            y: 16
-            x: parent.width - 20 - 16
-            width: 20
-            height: 20
-            horizontalAlignment: Text.AlignCenter
-            verticalAlignment: Text.AlignVCenter
-            color: Config.Settings.palette.accent.col500
-            font.family: Config.Settings.iconFont.font.family
-            font.pointSize: 20
-            text: dashboardStackView.currentItem.objectName == 'settingsContent' ? "" : ""
+        // Text {
+        //     id: settingsText
+        //     y: 16
+        //     x: parent.width - 20 - 16
+        //     width: 20
+        //     height: 20
+        //     horizontalAlignment: Text.AlignCenter
+        //     verticalAlignment: Text.AlignVCenter
+        //     color: Config.Settings.palette.accent.col500
+        //     font.family: Config.Settings.iconFont.font.family
+        //     font.pointSize: 20
+        //     text: dashboardStackView.currentItem.objectName == 'settingsContent' ? "" : ""
 
-            MouseArea {
-                id: settingsArea
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: settingsArea.containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
-                onEntered: parent.color = Config.Settings.palette.accent.col200
-                onExited: parent.color = Config.Settings.palette.accent.col500
-                onClicked: { 
-                    if(dashboardStackView.depth > 1) dashboardStackView.pop()
-                    else dashboardStackView.push(settings)
-                 }
-            }
-        }
+        //     MouseArea {
+        //         id: settingsArea
+        //         anchors.fill: parent
+        //         hoverEnabled: true
+        //         cursorShape: settingsArea.containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
+        //         onEntered: parent.color = Config.Settings.palette.accent.col200
+        //         onExited: parent.color = Config.Settings.palette.accent.col500
+        //         onClicked: { 
+        //             if(dashboardStackView.depth > 1) dashboardStackView.pop()
+        //             else dashboardStackView.push(settings)
+        //          }
+        //     }
+        // }
 
         StackView {
             id: dashboardStackView
@@ -110,8 +114,8 @@ Window {
                     // weather & apps 
                     ColumnLayout {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                        Layout.preferredWidth: 280
-                        Layout.minimumHeight: 320
+                        // Layout.preferredWidth: 280
+                        // Layout.minimumHeight: 320
                         spacing: 15
 
                         Weather { }
@@ -156,12 +160,9 @@ Window {
                     // mails, performance
                     ColumnLayout {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                        Layout.preferredWidth: 280
-                        Layout.minimumHeight: 320
                         spacing: 15
 
                         Mail {}
-
                         Performance {}
                     }
 
@@ -252,7 +253,7 @@ Window {
             color: Config.Settings.palette.accent.col300
             font.family: Config.Settings.textFont.font.family
             font.pointSize: 12
-            text: "hyprdash v0.1 alpha"
+            text: "hyprdash v0.1 beta"
         }
     }
 

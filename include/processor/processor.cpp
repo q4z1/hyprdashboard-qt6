@@ -6,6 +6,18 @@
 Processor::Processor()
 {
     mails = QJsonObject{};
+
+    curCpu["user"] = 0;
+    curCpu["nice"] = 0;
+    curCpu["system"] = 0;
+    curCpu["idle"] = 0;
+    curCpu["iowait"] = 0;
+    curCpu["irq"] = 0;
+    curCpu["softirq"] = 0;
+    curCpu["steal"] = 0;
+    curCpu["guest"] = 0;
+    curCpu["guest_nice"] = 0;
+
     performance = QJsonObject{
         {"cpu", "0"},
         {"ram", "0"},
@@ -125,7 +137,7 @@ QJsonObject Processor::getPerformance()
 void Processor::checkPerformance()
 {
     QSettings settings;
-
+    // qDebug() << "checkPerformance()";
     if (getOs() == OS_LINUX)
     {
         QString temp = settings.value("sys").toJsonObject().value("temp").toString();
@@ -161,22 +173,35 @@ void Processor::checkPerformance()
                 QRegularExpressionMatch match = re.match(statAll);
                 if (match.hasMatch())
                 {
+                    QMap<QString, int> prevCpu = curCpu;
                     QStringList all = match.captured("all").split(" ");
-                    int user = all[0].toInt();
-                    int nice =all[1].toInt();
-                    int system = all[2].toInt();
-                    int idle = all[3].toInt();
-                    int iowait = all[4].toInt();
-                    int irq = all[5].toInt();
-                    int softirq = all[6].toInt();
-                    int steal = all[7].toInt();
-                    int guest = all[8].toInt();
-                    int guest_nice = all[9].toInt();
-                    cpu = 100 - (float)(idle * 100) / (float)(user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice);
+                    curCpu["user"] = all[0].toInt();
+                    curCpu["nice"] =all[1].toInt();
+                    curCpu["system"] = all[2].toInt();
+                    curCpu["idle"] = all[3].toInt();
+                    curCpu["iowait"] = all[4].toInt();
+                    curCpu["irq"] = all[5].toInt();
+                    curCpu["softirq"] = all[6].toInt();
+                    curCpu["steal"] = all[7].toInt();
+                    curCpu["guest"] = all[8].toInt();
+                    curCpu["guest_nice"] = all[9].toInt();
+
+                    int prevNonIdle = prevCpu["user"] + prevCpu["nice"] + prevCpu["system"] + prevCpu["irq"] + prevCpu["softirq"] + prevCpu["steal"];
+                    int nonIdle = curCpu["user"] + curCpu["nice"] + curCpu["system"] + curCpu["irq"] + curCpu["softirq"] + curCpu["steal"];
+
+                    int prevTotal = prevCpu["idle"] + prevNonIdle;
+                    int total = curCpu["idle"] + nonIdle;
+
+                    int totald = total - prevTotal;
+                    int idled = curCpu["idle"] - prevCpu["idle"];
+
+                    cpu = (float)((float)(totald - idled) / (float)totald)*100;
+
+                    // cpu = 100 - (float)(idle * 100) / (float)(user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice);
                 }
                 // qDebug() << "cpu" << cpu;
                 statFile.close();
-                emit worker2->setResult(QVariant(cpu/10));
+                emit worker2->setResult(QVariant(cpu));
                 emit &Worker::finished;
         });
         connect( worker2, &Worker::finished, thread2, &QThread::quit);
@@ -281,13 +306,13 @@ void Processor::setTemp(QVariant temp)
 
 void Processor::setCpu(QVariant cpu)
 {
-    performance["cpu"] = QString::number(cpu.toFloat(), 'g',4);
+    performance["cpu"] = QString::number(cpu.toFloat(), 'f', 2);
     emit performanceChanged();
 }
 
 void Processor::setDisk(QVariant disk)
 {
-    performance["ram"] = QString::number(disk.toFloat(), 'g',4);
+    performance["ram"] = QString::number(disk.toFloat(), 'f', 2);
     emit performanceChanged();
 }
 

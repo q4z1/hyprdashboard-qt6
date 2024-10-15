@@ -40,6 +40,7 @@ private:
     QJsonObject mails;
     QJsonObject performance;
     QJsonObject upTime;
+    QMap<QString, int> curCpu;
 };
  
 #endif // PROCESSOR_H

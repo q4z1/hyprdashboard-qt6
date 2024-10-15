@@ -24,7 +24,7 @@ Box {
     }
 
     Timer {
-        interval: 1000; running: true; repeat: true;
+        interval: 2500; running: true; repeat: true;
         onTriggered: processor.checkPerformance()
     }
 
@@ -32,7 +32,7 @@ Box {
 
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
     Layout.preferredWidth: 280
-    Layout.preferredHeight: 229
+    Layout.preferredHeight: 213
 
     Column{
         anchors.centerIn: parent
@@ -46,7 +46,7 @@ Box {
             Layout.preferredWidth: parent.width - 16
             Layout.preferredHeight: 14
             font.family: Config.Settings.iconFont.font.family
-            color: Config.Settings.palette.color.col600
+            color: Config.Settings.palette.color.col300
         }
 
         Text{
@@ -66,7 +66,7 @@ Box {
             Layout.preferredWidth: parent.width - 16
             Layout.preferredHeight: 14
             font.family: Config.Settings.iconFont.font.family
-            color: Config.Settings.palette.color.col600
+            color: Config.Settings.palette.color.col400
         }
     }
 }

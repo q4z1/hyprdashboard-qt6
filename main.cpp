@@ -11,6 +11,9 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <QDebug>
 
 #include <include/config/globals.h>
@@ -22,8 +25,12 @@
 bool isServer = false;
 bool isRunning = false;
 
+// QtMessageHandler originalHandler = nullptr;
+void logToFile(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
 int main(int argc, char *argv[])
 {
+    qInstallMessageHandler(logToFile);
     QString appName = "hyprdash";
     QGuiApplication app(argc, argv);
     QGuiApplication::setApplicationName(appName); // ~/.config file
@@ -97,4 +104,30 @@ int main(int argc, char *argv[])
     }
 
     return 0;
+}
+
+void logToFile(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QString message = qFormatLogMessage(type, context, msg);
+    static FILE *f = fopen("/home/min/.config/hyprdash/hyprdash.log", "a");
+    switch (type) {
+    case QtDebugMsg:
+        fprintf(f, "%s Debug: %s\n", qPrintable(QDateTime::currentDateTime().toString()) ,qPrintable(message));
+        break;
+    case QtInfoMsg:
+        fprintf(f, "%s Info: %s\n", qPrintable(QDateTime::currentDateTime().toString()) ,qPrintable(message));
+        break;
+    case QtWarningMsg:
+        fprintf(f, "%s Warning: %s\n", qPrintable(QDateTime::currentDateTime().toString()) ,qPrintable(message));
+        break;
+    case QtCriticalMsg:
+        fprintf(f, "%s Critical: %s\n", qPrintable(QDateTime::currentDateTime().toString()) ,qPrintable(message));
+        break;
+    case QtFatalMsg:
+        fprintf(f, "%s Fatal: %s\n", qPrintable(QDateTime::currentDateTime().toString()) ,qPrintable(message));
+        break;
+    }
+    fflush(f);
+    // if (originalHandler)
+    //     *originalHandler(type, context, msg);
 }

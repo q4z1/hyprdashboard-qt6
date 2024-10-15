@@ -13,7 +13,7 @@ Box {
     Component.onCompleted: { userInfo = gSettings.getValue("userInfo") }
 
     Layout.minimumWidth: 256
-    Layout.minimumHeight: 320
+    Layout.minimumHeight: 303
     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
     ColumnLayout {
