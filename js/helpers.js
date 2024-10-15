@@ -1,8 +1,3 @@
-
-function showRequestInfo(text) {
-    console.log(text)
-}
-
 function getWeather(url) {
     var doc = new XMLHttpRequest();
     doc.onreadystatechange = function () {

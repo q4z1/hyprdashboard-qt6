@@ -10,12 +10,16 @@ qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     include/config/globals.h
     include/config/settings.h
     include/config/settings.cpp
+    include/processor/worker.h
+    include/processor/worker.cpp
     include/processor/processor.h
     include/processor/processor.cpp
     include/socket/server.h
     include/socket/server.cpp
     include/socket/client.h
     include/socket/client.cpp
+    include/socket/imap.h
+    include/socket/imap.cpp
 )
 
 set(qml_singletons
@@ -54,6 +58,7 @@ qt_add_qml_module(hyprdash
         "resources/gmail.svg"
         "resources/hyprdash.ttf"
         "resources/inkscape.svg"
+        "resources/inquies.svg"
         "resources/netflix.svg"
         "resources/pokerth.svg"
         "resources/profile.jpg"

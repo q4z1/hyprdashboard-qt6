@@ -158,7 +158,7 @@ Window {
                         Layout.minimumHeight: 320
                         spacing: 15
 
-                        // Mail {}
+                        Mail {}
                     }
 
                     // actions

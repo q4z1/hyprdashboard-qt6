@@ -1,9 +1,11 @@
 #include "processor.h"
+#include "worker.h"
 
 #include "../config/globals.h"
 
 Processor::Processor()
 {
+    mails = QJsonObject{};
 }
 
 int Processor::getOs()
@@ -88,19 +90,50 @@ QJsonObject Processor::getUpTime()
     return object;
 }
 
-QJsonObject Processor::checkMails()
+QJsonObject Processor::getMails()
 {
-    QJsonObject object;
+    return mails;
+}
 
+void Processor::checkMails()
+{
     QSettings settings;
 
-    if(settings.value("mailbox").isValid()) {
-    
-        object = QJsonDocument::fromVariant(settings.value("mailbox")).object();
-        qDebug() << "provider: " << QJsonDocument(object).toJson(QJsonDocument::Compact);
+    // qDebug() << "checkMails()";
+
+    if(settings.contains("mailbox")) {
+        QJsonArray providerA = QJsonValue::fromVariant(settings.value("mailbox")).toArray();
+        // qDebug() << "providerA: " << providerA;
+        QJsonArray::iterator i;
+        for (i = providerA.begin(); i != providerA.end(); ++i)
+        {
+            QJsonObject provider = (*i).toObject();
+            if(mails.value(provider.value("provider").toString()).isUndefined()) mails[provider["provider"].toString()] = 
+                            QJsonObject{ {"unread", 0}, {"icon", provider.value("icon").toString()}, {"webmail", provider.value("webmail").toString()} };
+            QThread* thread = new QThread();
+            Worker* worker = new Worker();
+            worker->moveToThread(thread);
+            connect( worker, &Worker::error, this, [](QString error){ qDebug() << "worker error:" << error; });
+            connect( thread, &QThread::started, worker, [this, provider]() {
+                    Imap* imap = new Imap(provider);
+                    connect( imap, &Imap::mailsChecked, this, &Processor::setUnseen);
+                    imap->run();
+                    emit &Worker::finished;
+            });
+            connect( worker, &Worker::finished, thread, &QThread::quit);
+            connect( worker, &Worker::finished, worker, &Worker::deleteLater);
+            connect( thread, &QThread::finished, thread, &QThread::deleteLater);
+            thread->start();
+        }
     }
-    
-    return object;
+}
+void Processor::setUnseen(QString provider, int unseen)
+{
+    // qDebug() << "Processor::setUnseen entered. - provider=" << provider << " unseen=" << unseen;
+    QJsonObject tmpP = mails[provider].toObject();
+    tmpP["unread"] = unseen;
+    mails[provider] = tmpP;
+    emit mailsChanged();
 }
 
 void Processor::launch(const QString &command, const QString &arguments)
