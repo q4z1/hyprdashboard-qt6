@@ -1,6 +1,5 @@
 import QtQuick 6.5
 import QtQuick.Layouts
-import QtQuick.Effects
 
 import "../config" as Config
 import "../components"
@@ -8,13 +7,24 @@ import "../components"
 Box {
     id: upTimeBox
 
+    Connections {
+        target: processor
+
+        function onUpTimeChanged() { 
+            upTime = processor.getUpTime()
+            upHours.text = upTime["hours"]
+            upMinutes.text = upTime["minutes"]
+            // console.log(JSON.stringify(mails))
+        }
+    }
+
     Component.onCompleted: { 
-        upTime = processor.getUpTime()
+        processor.checkUpTime()
     }
 
     Timer {
         interval: 60000; running: true; repeat: true;
-        onTriggered: upTime = processor.getUpTime()
+        onTriggered: processor.checkUpTime()
     }
 
     property var upTime
@@ -46,21 +56,21 @@ Box {
             Layout.bottomMargin: 8
 
             Text {
+                id: upHours
                 Layout.preferredHeight: 40
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 color: Config.Settings.palette.accent.col300
                 font.family: Config.Settings.textFont.font.family
                 font.pointSize: 34
-                text: upTime.hours
             }
 
             Text {
+                id: upMinutes
                 Layout.preferredHeight: 40
                 Layout.alignment: Qt.AlignRight | Qt.AlignTop
                 color: Config.Settings.palette.accent.col300
                 font.family: Config.Settings.textFont.font.family
                 font.pointSize: 34
-                text: upTime.minutes
             }
         }
 

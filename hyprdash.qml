@@ -79,7 +79,9 @@ Window {
 
         StackView {
             id: dashboardStackView
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: parent.width / 12 * 10
+            height: parent.height / 8 * 6
             anchors.leftMargin: parent.width / 12
             anchors.rightMargin: parent.width / 12
             anchors.topMargin: parent.height / 8
@@ -151,7 +153,7 @@ Window {
                         }
                     }
 
-                    // mails
+                    // mails, performance
                     ColumnLayout {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         Layout.preferredWidth: 280
@@ -159,14 +161,16 @@ Window {
                         spacing: 15
 
                         Mail {}
+
+                        Performance {}
                     }
 
                     // actions
                     GridLayout {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                         columns: 2
-                        columnSpacing: 10
-                        rowSpacing: 10
+                        columnSpacing: 15
+                        rowSpacing: 15
 
                         property var actionButtons
                         Component.onCompleted: { 

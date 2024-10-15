@@ -11,6 +11,7 @@ public slots:
 signals:
     void finished();
     void error(QString err);
+    void setResult(QVariant param);
 private:
     // add your variables here
 };

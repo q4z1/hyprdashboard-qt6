@@ -37,6 +37,9 @@
             "webmail": "https://webmail.com"
         }
     ]},
+    "sys": {
+        "temp": "/sys/class/thermal/thermal_zone1/temp"
+    },
     "tileLaunchers": [
         {
             "id": "geforcenow",

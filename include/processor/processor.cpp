@@ -6,6 +6,16 @@
 Processor::Processor()
 {
     mails = QJsonObject{};
+    performance = QJsonObject{
+        {"cpu", "0"},
+        {"ram", "0"},
+        {"temp", "0"}
+    };
+
+    QJsonObject upTime{
+        {"hours", 0},
+        {"minutes", 0}
+    };
 }
 
 int Processor::getOs()
@@ -69,25 +79,141 @@ QJsonObject Processor::getUserData()
 
 QJsonObject Processor::getUpTime()
 {
-    QJsonObject object{
-        {"hours", 0},
-        {"minutes", 0}
-    };
+    return upTime;
+}
+
+void Processor::checkUpTime()
+{
+    QSettings settings;
 
     if (getOs() == OS_LINUX)
     {
-        QFile upFile("/proc/uptime");
-        upFile.open(QIODevice::ReadOnly);
-        QRegularExpression re = QRegularExpression("^(?<uptime>\\d+\\.\\d+).*$", QRegularExpression::DotMatchesEverythingOption);
-        QRegularExpressionMatch match = re.match(upFile.readAll());
-        if (match.hasMatch())
-        {
-            int upTime = round(match.captured("uptime").toFloat());
-            object["minutes"] = int((upTime / 60)%60);
-            object["hours"] = int(upTime / 3600);
-        }
+        QString temp = settings.value("sys").toJsonObject().value("temp").toString();
+        QThread* thread1 = new QThread();
+        Worker* worker1 = new Worker();
+        worker1->moveToThread(thread1);
+        connect( worker1, &Worker::error, this, [](QString error){ qDebug() << "worker error:" << error; });
+        connect( worker1, &Worker::setResult, this, &Processor::setUpTime);
+        connect( thread1, &QThread::started, worker1, [this, temp, worker1]() {
+            QFile upFile("/proc/uptime");
+            upFile.open(QIODevice::ReadOnly);
+            QJsonObject upTime = QJsonObject{};
+            QRegularExpression re = QRegularExpression("^(?<uptime>\\d+\\.\\d+).*$", QRegularExpression::DotMatchesEverythingOption);
+            QRegularExpressionMatch match = re.match(upFile.readAll());
+            if (match.hasMatch())
+            {
+                int upTimeI = round(match.captured("uptime").toFloat());
+                upTime["minutes"] = int((upTimeI / 60)%60);
+                upTime["hours"] = int(upTimeI / 3600);
+            }
+            upFile.close();
+                emit worker1->setResult(QVariant(upTime));
+                emit &Worker::finished;
+        });
+        connect( worker1, &Worker::finished, thread1, &QThread::quit);
+        connect( worker1, &Worker::finished, worker1, &Worker::deleteLater);
+        connect( thread1, &QThread::finished, thread1, &QThread::deleteLater);
+        thread1->start();
     }
-    return object;
+}
+
+QJsonObject Processor::getPerformance()
+{
+    return performance;
+}
+
+void Processor::checkPerformance()
+{
+    QSettings settings;
+
+    if (getOs() == OS_LINUX)
+    {
+        QString temp = settings.value("sys").toJsonObject().value("temp").toString();
+        QThread* thread1 = new QThread();
+        Worker* worker1 = new Worker();
+        worker1->moveToThread(thread1);
+        connect( worker1, &Worker::error, this, [](QString error){ qDebug() << "worker error:" << error; });
+        connect( worker1, &Worker::setResult, this, &Processor::setTemp);
+        connect( thread1, &QThread::started, worker1, [this, temp, worker1]() {
+                QFile tempFile(temp);
+                tempFile.open(QIODevice::ReadOnly);
+                int temperature = QString(tempFile.readAll()).toInt() / 1000;
+                tempFile.close();
+                emit worker1->setResult(QVariant(temperature));
+                emit &Worker::finished;
+        });
+        connect( worker1, &Worker::finished, thread1, &QThread::quit);
+        connect( worker1, &Worker::finished, worker1, &Worker::deleteLater);
+        connect( thread1, &QThread::finished, thread1, &QThread::deleteLater);
+        thread1->start();
+
+        QThread* thread2 = new QThread();
+        Worker* worker2 = new Worker();
+        worker2->moveToThread(thread2);
+        connect( worker2, &Worker::error, this, [](QString error){ qDebug() << "worker error:" << error; });
+        connect( worker2, &Worker::setResult, this, &Processor::setCpu);
+        connect( thread2, &QThread::started, worker2, [this, worker2]() {
+                QFile statFile("/proc/stat");
+                statFile.open(QIODevice::ReadOnly);
+                float cpu;
+                QString statAll = statFile.readAll();
+                QRegularExpression re = QRegularExpression("^cpu[^0-9]+(?<all>.*).cpu0.*$", QRegularExpression::DotMatchesEverythingOption);
+                QRegularExpressionMatch match = re.match(statAll);
+                if (match.hasMatch())
+                {
+                    QStringList all = match.captured("all").split(" ");
+                    int user = all[0].toInt();
+                    int nice =all[1].toInt();
+                    int system = all[2].toInt();
+                    int idle = all[3].toInt();
+                    int iowait = all[4].toInt();
+                    int irq = all[5].toInt();
+                    int softirq = all[6].toInt();
+                    int steal = all[7].toInt();
+                    int guest = all[8].toInt();
+                    int guest_nice = all[9].toInt();
+                    cpu = 100 - (float)(idle * 100) / (float)(user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice);
+                }
+                // qDebug() << "cpu" << cpu;
+                statFile.close();
+                emit worker2->setResult(QVariant(cpu/10));
+                emit &Worker::finished;
+        });
+        connect( worker2, &Worker::finished, thread2, &QThread::quit);
+        connect( worker2, &Worker::finished, worker2, &Worker::deleteLater);
+        connect( thread2, &QThread::finished, thread2, &QThread::deleteLater);
+        thread2->start();
+
+        QThread* thread3 = new QThread();
+        Worker* worker3 = new Worker();
+        worker3->moveToThread(thread3);
+        connect( worker3, &Worker::error, this, [](QString error){ qDebug() << "worker error:" << error; });
+        connect( worker3, &Worker::setResult, this, &Processor::setDisk);
+        connect( thread3, &QThread::started, worker3, [this, worker3]() {
+                QFile memFile("/proc/meminfo");
+                memFile.open(QIODevice::ReadOnly);
+                float ram;
+                QString memAll = memFile.readAll();
+                // qDebug() << "memAll:" << memAll;
+                QRegularExpression re = QRegularExpression("^MemTotal[^0-9]+(?<total>\\d+).*MemAvailable[^0-9]+(?<free>\\d+)[^0-9]+.*$", QRegularExpression::DotMatchesEverythingOption);
+                QRegularExpressionMatch match = re.match(memAll);
+                if (match.hasMatch())
+                {
+                    int total = match.captured("total").toInt();
+                    int free = match.captured("free").toInt();
+                    // qDebug() << total << free;
+                    ram = (float)((float)(total - free) / (float)total) * 100;
+
+                }
+                memFile.close();
+                emit worker3->setResult(QVariant(ram));
+                emit &Worker::finished;
+        });
+        connect( worker3, &Worker::finished, thread3, &QThread::quit);
+        connect( worker3, &Worker::finished, worker3, &Worker::deleteLater);
+        connect( thread3, &QThread::finished, thread3, &QThread::deleteLater);
+        thread3->start();
+    }
 }
 
 QJsonObject Processor::getMails()
@@ -108,6 +234,7 @@ void Processor::checkMails()
         for (i = providerA.begin(); i != providerA.end(); ++i)
         {
             QJsonObject provider = (*i).toObject();
+            // qDebug() << provider;
             if(mails.value(provider.value("provider").toString()).isUndefined()) mails[provider["provider"].toString()] = 
                             QJsonObject{ {"unread", 0}, {"icon", provider.value("icon").toString()}, {"webmail", provider.value("webmail").toString()} };
             QThread* thread = new QThread();
@@ -127,6 +254,17 @@ void Processor::checkMails()
         }
     }
 }
+
+void Processor::setUpTime(QVariant upT)
+{
+    QMapIterator <QString, QVariant> i(upT.toMap());
+    while (i.hasNext()) {
+        i.next();
+        upTime[i.key()] = QJsonValue::fromVariant(i.value());
+    }
+    emit upTimeChanged();
+}
+
 void Processor::setUnseen(QString provider, int unseen)
 {
     // qDebug() << "Processor::setUnseen entered. - provider=" << provider << " unseen=" << unseen;
@@ -134,6 +272,23 @@ void Processor::setUnseen(QString provider, int unseen)
     tmpP["unread"] = unseen;
     mails[provider] = tmpP;
     emit mailsChanged();
+}
+void Processor::setTemp(QVariant temp)
+{
+    performance["temp"] = temp.toString();
+    emit performanceChanged();
+}
+
+void Processor::setCpu(QVariant cpu)
+{
+    performance["cpu"] = QString::number(cpu.toFloat(), 'g',4);
+    emit performanceChanged();
+}
+
+void Processor::setDisk(QVariant disk)
+{
+    performance["ram"] = QString::number(disk.toFloat(), 'g',4);
+    emit performanceChanged();
 }
 
 void Processor::launch(const QString &command, const QString &arguments)

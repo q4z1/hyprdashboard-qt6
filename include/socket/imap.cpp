@@ -18,7 +18,8 @@ Imap::Imap(QJsonObject p)
                    { response = imapSocket->readAll(); });
 
   QObject::connect(imapSocket, &QTcpSocket::errorOccurred, [this]()
-                   { qDebug() << "imapSocket error: " << error; });
+                   { 
+                    qDebug() << "imapSocket error" << "with" << provider["server"].toString() << ":" << error; });
 }
 
 void Imap::run()
@@ -26,10 +27,10 @@ void Imap::run()
   // qDebug() << "IMap::run() entered.";
   imapSocket->connectToHostEncrypted(provider["server"].toString(), provider["port"].toString().toInt());
   imapSocket->waitForConnected();
-  // qDebug() << response;
+  // qDebug() << provider["server"].toString() << "response:" << response;
   if (!response.contains("* OK"))
   {
-    disconnect();
+    if(imapSocket->state() == QAbstractSocket::ConnectedState) disconnect();
     return;
   }
   if (!Login())
