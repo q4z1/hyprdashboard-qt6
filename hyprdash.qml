@@ -60,12 +60,7 @@ Window {
         //     x: parent.width - 20 - 16
         //     width: 20
         //     height: 20
-        //     horizontalAlignment: Text.AlignCenter
-        //     verticalAlignment: Text.AlignVCenter
-        //     color: Config.Settings.palette.accent.col500
-        //     font.family: Config.Settings.iconFont.font.family
-        //     font.pointSize: 20
-        //     text: dashboardStackView.currentItem.objectName == 'settingsContent' ? "" : ""
+        //     source: dashboardStackView.currentItem.objectName == 'settingsContent' ? "" : "" // @TODO: proper Icon sources
 
         //     MouseArea {
         //         id: settingsArea
@@ -183,12 +178,10 @@ Window {
                             ActionButton {
                                 required property var modelData
                                 objectName: modelData["id"]
-                                textI: modelData["textI"]
+                                icon: modelData["icon"]
                                 colorI: modelData["colorI"]
-                                sizeI: modelData["sizeI"] ? modelData["sizeI"] : 48
                                 target: modelData["target"]
                                 args: modelData["args"] ? modelData["args"] : null
-                                rotation: modelData["rotation"] ? modelData["rotation"] : 0
                             }
                         }
                      }

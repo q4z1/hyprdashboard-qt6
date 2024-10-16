@@ -66,25 +66,26 @@ QJsonObject Processor::getUserData()
     if (getOs() == OS_LINUX)
     {
         QFile passwdFile("/etc/passwd");
-        passwdFile.open(QIODevice::ReadOnly);
-        QTextStream in(&passwdFile);
-        QString line;
-        do
-        {
-            line = in.readLine();
-            QRegularExpression re = QRegularExpression("^" + qgetenv("LOGNAME") + ":.*:(?<uid>\\d+):(?<gid>\\d+):(?<desc>.*):(?<home>.*):(?<shell>.*)$", QRegularExpression::DotMatchesEverythingOption);
-            QRegularExpressionMatch match = re.match(line);
-            if (match.hasMatch())
+        if(passwdFile.open(QIODevice::ReadOnly)){
+            QTextStream in(&passwdFile);
+            QString line;
+            do
             {
-                object["user"] = QString(qgetenv("LOGNAME"));
-                object["desc"] = match.captured("desc");
-                object["uid"] = match.captured("uid");
-                object["gid"] = match.captured("gid");
-                object["home"] = match.captured("home");
-                object["shell"] = match.captured("shell");
-                break;
-            }
-        } while (!line.isNull());
+                line = in.readLine();
+                QRegularExpression re = QRegularExpression("^" + qgetenv("LOGNAME") + ":.*:(?<uid>\\d+):(?<gid>\\d+):(?<desc>.*):(?<home>.*):(?<shell>.*)$", QRegularExpression::DotMatchesEverythingOption);
+                QRegularExpressionMatch match = re.match(line);
+                if (match.hasMatch())
+                {
+                    object["user"] = QString(qgetenv("LOGNAME"));
+                    object["desc"] = match.captured("desc");
+                    object["uid"] = match.captured("uid");
+                    object["gid"] = match.captured("gid");
+                    object["home"] = match.captured("home");
+                    object["shell"] = match.captured("shell");
+                    break;
+                }
+            } while (!line.isNull());
+        }
     }
     return object;
 }
@@ -108,19 +109,20 @@ void Processor::checkUpTime()
         connect( worker1, &Worker::setResult, this, &Processor::setUpTime);
         connect( thread1, &QThread::started, worker1, [this, temp, worker1]() {
             QFile upFile("/proc/uptime");
-            upFile.open(QIODevice::ReadOnly);
-            QJsonObject upTime = QJsonObject{};
-            QRegularExpression re = QRegularExpression("^(?<uptime>\\d+\\.\\d+).*$", QRegularExpression::DotMatchesEverythingOption);
-            QRegularExpressionMatch match = re.match(upFile.readAll());
-            if (match.hasMatch())
-            {
-                int upTimeI = round(match.captured("uptime").toFloat());
-                upTime["minutes"] = int((upTimeI / 60)%60);
-                upTime["hours"] = int(upTimeI / 3600);
-            }
-            upFile.close();
+            if(upFile.open(QIODevice::ReadOnly)) {
+                QJsonObject upTime = QJsonObject{};
+                QRegularExpression re = QRegularExpression("^(?<uptime>\\d+\\.\\d+).*$", QRegularExpression::DotMatchesEverythingOption);
+                QRegularExpressionMatch match = re.match(upFile.readAll());
+                if (match.hasMatch())
+                {
+                    int upTimeI = round(match.captured("uptime").toFloat());
+                    upTime["minutes"] = int((upTimeI / 60)%60);
+                    upTime["hours"] = int(upTimeI / 3600);
+                }
+                upFile.close();
                 emit worker1->setResult(QVariant(upTime));
-                emit &Worker::finished;
+            }
+            emit &Worker::finished;
         });
         connect( worker1, &Worker::finished, thread1, &QThread::quit);
         connect( worker1, &Worker::finished, worker1, &Worker::deleteLater);
@@ -148,10 +150,11 @@ void Processor::checkPerformance()
         connect( worker1, &Worker::setResult, this, &Processor::setTemp);
         connect( thread1, &QThread::started, worker1, [this, temp, worker1]() {
                 QFile tempFile(temp);
-                tempFile.open(QIODevice::ReadOnly);
-                int temperature = QString(tempFile.readAll()).toInt() / 1000;
-                tempFile.close();
-                emit worker1->setResult(QVariant(temperature));
+                if(tempFile.open(QIODevice::ReadOnly)) {
+                    int temperature = QString(tempFile.readAll()).toInt() / 1000;
+                    tempFile.close();
+                    emit worker1->setResult(QVariant(temperature));
+                }
                 emit &Worker::finished;
         });
         connect( worker1, &Worker::finished, thread1, &QThread::quit);
@@ -166,42 +169,43 @@ void Processor::checkPerformance()
         connect( worker2, &Worker::setResult, this, &Processor::setCpu);
         connect( thread2, &QThread::started, worker2, [this, worker2]() {
                 QFile statFile("/proc/stat");
-                statFile.open(QIODevice::ReadOnly);
-                float cpu;
-                QString statAll = statFile.readAll();
-                QRegularExpression re = QRegularExpression("^cpu[^0-9]+(?<all>.*).cpu0.*$", QRegularExpression::DotMatchesEverythingOption);
-                QRegularExpressionMatch match = re.match(statAll);
-                if (match.hasMatch())
-                {
-                    QMap<QString, int> prevCpu = curCpu;
-                    QStringList all = match.captured("all").split(" ");
-                    curCpu["user"] = all[0].toInt();
-                    curCpu["nice"] =all[1].toInt();
-                    curCpu["system"] = all[2].toInt();
-                    curCpu["idle"] = all[3].toInt();
-                    curCpu["iowait"] = all[4].toInt();
-                    curCpu["irq"] = all[5].toInt();
-                    curCpu["softirq"] = all[6].toInt();
-                    curCpu["steal"] = all[7].toInt();
-                    curCpu["guest"] = all[8].toInt();
-                    curCpu["guest_nice"] = all[9].toInt();
+                if(statFile.open(QIODevice::ReadOnly)){
+                    float cpu;
+                    QString statAll = statFile.readAll();
+                    QRegularExpression re = QRegularExpression("^cpu[^0-9]+(?<all>.*).cpu0.*$", QRegularExpression::DotMatchesEverythingOption);
+                    QRegularExpressionMatch match = re.match(statAll);
+                    if (match.hasMatch())
+                    {
+                        QMap<QString, int> prevCpu = curCpu;
+                        QStringList all = match.captured("all").split(" ");
+                        curCpu["user"] = all[0].toInt();
+                        curCpu["nice"] =all[1].toInt();
+                        curCpu["system"] = all[2].toInt();
+                        curCpu["idle"] = all[3].toInt();
+                        curCpu["iowait"] = all[4].toInt();
+                        curCpu["irq"] = all[5].toInt();
+                        curCpu["softirq"] = all[6].toInt();
+                        curCpu["steal"] = all[7].toInt();
+                        curCpu["guest"] = all[8].toInt();
+                        curCpu["guest_nice"] = all[9].toInt();
 
-                    int prevNonIdle = prevCpu["user"] + prevCpu["nice"] + prevCpu["system"] + prevCpu["irq"] + prevCpu["softirq"] + prevCpu["steal"];
-                    int nonIdle = curCpu["user"] + curCpu["nice"] + curCpu["system"] + curCpu["irq"] + curCpu["softirq"] + curCpu["steal"];
+                        int prevNonIdle = prevCpu["user"] + prevCpu["nice"] + prevCpu["system"] + prevCpu["irq"] + prevCpu["softirq"] + prevCpu["steal"];
+                        int nonIdle = curCpu["user"] + curCpu["nice"] + curCpu["system"] + curCpu["irq"] + curCpu["softirq"] + curCpu["steal"];
 
-                    int prevTotal = prevCpu["idle"] + prevNonIdle;
-                    int total = curCpu["idle"] + nonIdle;
+                        int prevTotal = prevCpu["idle"] + prevNonIdle;
+                        int total = curCpu["idle"] + nonIdle;
 
-                    int totald = total - prevTotal;
-                    int idled = curCpu["idle"] - prevCpu["idle"];
+                        int totald = total - prevTotal;
+                        int idled = curCpu["idle"] - prevCpu["idle"];
 
-                    cpu = (float)((float)(totald - idled) / (float)totald)*100;
+                        cpu = (float)((float)(totald - idled) / (float)totald)*100;
 
-                    // cpu = 100 - (float)(idle * 100) / (float)(user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice);
+                        // cpu = 100 - (float)(idle * 100) / (float)(user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice);
+                    }
+                    // qDebug() << "cpu" << cpu;
+                    statFile.close();
+                    emit worker2->setResult(QVariant(cpu));
                 }
-                // qDebug() << "cpu" << cpu;
-                statFile.close();
-                emit worker2->setResult(QVariant(cpu));
                 emit &Worker::finished;
         });
         connect( worker2, &Worker::finished, thread2, &QThread::quit);
@@ -216,22 +220,23 @@ void Processor::checkPerformance()
         connect( worker3, &Worker::setResult, this, &Processor::setDisk);
         connect( thread3, &QThread::started, worker3, [this, worker3]() {
                 QFile memFile("/proc/meminfo");
-                memFile.open(QIODevice::ReadOnly);
-                float ram;
-                QString memAll = memFile.readAll();
-                // qDebug() << "memAll:" << memAll;
-                QRegularExpression re = QRegularExpression("^MemTotal[^0-9]+(?<total>\\d+).*MemAvailable[^0-9]+(?<free>\\d+)[^0-9]+.*$", QRegularExpression::DotMatchesEverythingOption);
-                QRegularExpressionMatch match = re.match(memAll);
-                if (match.hasMatch())
-                {
-                    int total = match.captured("total").toInt();
-                    int free = match.captured("free").toInt();
-                    // qDebug() << total << free;
-                    ram = (float)((float)(total - free) / (float)total) * 100;
+                if(memFile.open(QIODevice::ReadOnly)){
+                    float ram;
+                    QString memAll = memFile.readAll();
+                    // qDebug() << "memAll:" << memAll;
+                    QRegularExpression re = QRegularExpression("^MemTotal[^0-9]+(?<total>\\d+).*MemAvailable[^0-9]+(?<free>\\d+)[^0-9]+.*$", QRegularExpression::DotMatchesEverythingOption);
+                    QRegularExpressionMatch match = re.match(memAll);
+                    if (match.hasMatch())
+                    {
+                        int total = match.captured("total").toInt();
+                        int free = match.captured("free").toInt();
+                        // qDebug() << total << free;
+                        ram = (float)((float)(total - free) / (float)total) * 100;
 
+                    }
+                    memFile.close();
+                    emit worker3->setResult(QVariant(ram));
                 }
-                memFile.close();
-                emit worker3->setResult(QVariant(ram));
                 emit &Worker::finished;
         });
         connect( worker3, &Worker::finished, thread3, &QThread::quit);

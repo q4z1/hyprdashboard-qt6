@@ -1,6 +1,7 @@
 import QtQuick 6.5
-import QtQuick.Layouts
+import QtQuick.Controls
 import QtQuick.Effects
+import QtQuick.Layouts
 
 import "../config" as Config
 import "../components"
@@ -10,21 +11,20 @@ Box {
     property string args
     property int rotation
     property string colorI
-    property alias textI: actionText.text
-    property alias sizeI: actionText.font.pointSize
+    property alias icon: actionIcon.source
 
     Layout.minimumWidth: 145
     Layout.minimumHeight: 145
     Layout.alignment: Qt.AlignTop
 
-    Text {
-        id: actionText
+    IconImage {
+        id: actionIcon
         anchors.centerIn: parent
-        font.family: Config.Settings.iconFont.font.family
-        transform: Rotation { origin.x: 36; origin.y: 36; angle: rotation}
+        width: 56
+        height: 56
         Component.onCompleted: { 
             let colors = colorI.split(".")
-            actionText.color =  Config.Settings.palette[colors[0]][colors[1]]
+            actionIcon.color =  Config.Settings.palette[colors[0]][colors[1]]
         }
 
     }

@@ -26,10 +26,6 @@ QtObject {
         }
     }
 
-    readonly property QtObject iconFont: FontLoader {
-        source: "../resources/hyprdash.ttf"
-    }
-
     readonly property QtObject textFont: FontLoader {
         source: "../resources/cq_mono.otf"
     }

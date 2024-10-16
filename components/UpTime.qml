@@ -1,5 +1,6 @@
 import QtQuick 6.5
 import QtQuick.Layouts
+import QtQuick.Controls
 
 import "../config" as Config
 import "../components"
@@ -34,53 +35,55 @@ Box {
     Layout.preferredHeight: 100
 
     RowLayout{
-        anchors.fill: parent
+        anchors.centerIn: parent
+        width: parent.width - 32
+        height: parent.height - 32
         spacing: 10
 
-        Text{
-            text: ""
-            font.pointSize: 50
-            Layout.preferredWidth: 50
-            Layout.preferredHeight: 50
-            Layout.leftMargin: 5
-            Layout.rightMargin: 10
-            Layout.bottomMargin: 10
-            verticalAlignment: Text.AlignVCenter
-            font.family: Config.Settings.iconFont.font.family
+        IconImage {
+            Layout.preferredWidth: 60
+            Layout.preferredHeight: 60
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            width: 56
+            height: 56
             color: Config.Settings.palette.color.col600
+            source: "../resources/timer.svg"
         }
 
         ColumnLayout {
             id: hoursMinutes
-            Layout.preferredHeight: 56
-            Layout.bottomMargin: 8
+            Layout.preferredHeight: parent.height
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            spacing: 0
 
             Text {
                 id: upHours
-                Layout.preferredHeight: 40
+                Layout.preferredHeight: 30
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                verticalAlignment: Text.AlignBottom
                 color: Config.Settings.palette.accent.col300
                 font.family: Config.Settings.textFont.font.family
-                font.pointSize: 34
+                font.pointSize: 32
             }
 
             Text {
                 id: upMinutes
-                Layout.preferredHeight: 40
+                Layout.preferredHeight: 30
                 Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                verticalAlignment: Text.AlignTop
                 color: Config.Settings.palette.accent.col300
                 font.family: Config.Settings.textFont.font.family
-                font.pointSize: 34
+                font.pointSize: 32
             }
         }
 
         ColumnLayout {
-            Layout.preferredHeight: 56
-            Layout.topMargin: 8
+            Layout.preferredHeight: parent.height
 
             Text {
-                Layout.preferredHeight: 40
+                Layout.preferredHeight: 30
                 Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+                verticalAlignment: Text.AlignBottom
                 color: Config.Settings.palette.accent.col400
                 font.family: Config.Settings.textFont.font.family
                 font.pointSize: 20
@@ -88,8 +91,9 @@ Box {
             }
 
             Text {
-                Layout.preferredHeight: 40
-                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+                Layout.preferredHeight: 30
+                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                verticalAlignment: Text.AlignTop
                 color: Config.Settings.palette.accent.col400
                 font.family: Config.Settings.textFont.font.family
                 font.pointSize: 20
