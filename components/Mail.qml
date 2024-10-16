@@ -39,7 +39,7 @@ Box {
     }
 
     Timer {
-        interval: 600000; running: true; repeat: true;
+        interval: 300000; running: true; repeat: true;
             onTriggered: processor.checkMails()
     }
 

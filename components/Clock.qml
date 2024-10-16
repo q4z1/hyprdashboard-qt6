@@ -56,7 +56,7 @@ Box {
                 anchors.fill: parent
 
                 Text {
-                    Layout.preferredHeight: 16
+                    Layout.preferredHeight: 12
                     Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                     color: Config.Settings.palette.color.col300
                     font.family: Config.Settings.textFont.font.family
@@ -65,7 +65,7 @@ Box {
                 }
 
                 Text {
-                    Layout.preferredHeight: 40
+                    Layout.preferredHeight: 32
                     Layout.alignment: Qt.AlignRight | Qt.AlignTop
                     color: Config.Settings.palette.color.col500
                     font.family: Config.Settings.textFont.font.family

@@ -57,16 +57,17 @@ Box {
         id: weatherContent
         anchors.fill: parent
         anchors.margins: 16
+        spacing: 0
 
         RowLayout{
             Layout.preferredWidth: parent.width - 32
-            Layout.preferredHeight: 128
+            Layout.preferredHeight: 96
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
             Item {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 Layout.preferredWidth: parent.width / 2
-                Layout.preferredHeight: 112
+                Layout.preferredHeight: 96
                 IconImage {
                     id: weatherIcon
                     anchors.centerIn: parent
@@ -76,12 +77,11 @@ Box {
                 }
             }
 
-
             Text {
                 id: tempText
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 Layout.preferredWidth: parent.width / 2
-                Layout.preferredHeight: 112
+                Layout.preferredHeight: 96
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: Config.Settings.palette.color.col200
@@ -105,6 +105,7 @@ Box {
         RowLayout {
             Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             Layout.preferredWidth: parent.width
+            Layout.bottomMargin: 4
 
             ColumnLayout {
                 Layout.alignment: Qt.AlignLeft | Qt.AlignBottom

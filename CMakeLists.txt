@@ -36,6 +36,7 @@ qt_add_qml_module(hyprdash
         "components/AppLauncher.qml"
         "components/Box.qml"
         "components/Clock.qml"
+        "components/Locations.qml"
         "components/Mail.qml"
         "components/Performance.qml"
         "components/TileLauncher.qml"

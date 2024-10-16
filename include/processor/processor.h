@@ -14,6 +14,7 @@ public:
     Processor();
     ~Processor();
     int getOs();
+    QElapsedTimer appTimer;
     Q_INVOKABLE QJsonObject getUserData();
     Q_INVOKABLE void checkMails();
     Q_INVOKABLE void checkPerformance();
@@ -21,6 +22,7 @@ public:
     Q_INVOKABLE QJsonObject getMails();
     Q_INVOKABLE QJsonObject getPerformance();
     Q_INVOKABLE QJsonObject getUpTime();
+    Q_INVOKABLE QJsonObject getAppUpTime();
 
 public slots:
     void launch(const QString &command, const QString &args);
@@ -40,6 +42,7 @@ private:
     QJsonObject mails;
     QJsonObject performance;
     QJsonObject upTime;
+    QJsonObject appUpTime;
     QMap<QString, int> curCpu;
 };
  

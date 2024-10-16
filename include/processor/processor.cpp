@@ -28,6 +28,12 @@ Processor::Processor()
         {"hours", 0},
         {"minutes", 0}
     };
+
+    QJsonObject appUpTime{
+        {"hours", "00"},
+        {"minutes", "00"},
+        {"seconds", "00"}
+    };
 }
 
 int Processor::getOs()
@@ -67,25 +73,19 @@ QJsonObject Processor::getUserData()
     {
         QFile passwdFile("/etc/passwd");
         if(passwdFile.open(QIODevice::ReadOnly)){
-            QTextStream in(&passwdFile);
-            QString line;
-            do
+            QRegularExpression re = QRegularExpression("^" + qgetenv("LOGNAME") + ":.*:(?<uid>\\d+):(?<gid>\\d+):(?<desc>.*):(?<home>.*):(?<shell>.*)$", QRegularExpression::DotMatchesEverythingOption);
+            QRegularExpressionMatch match = re.match(passwdFile.readAll());
+            if (match.hasMatch())
             {
-                line = in.readLine();
-                QRegularExpression re = QRegularExpression("^" + qgetenv("LOGNAME") + ":.*:(?<uid>\\d+):(?<gid>\\d+):(?<desc>.*):(?<home>.*):(?<shell>.*)$", QRegularExpression::DotMatchesEverythingOption);
-                QRegularExpressionMatch match = re.match(line);
-                if (match.hasMatch())
-                {
-                    object["user"] = QString(qgetenv("LOGNAME"));
-                    object["desc"] = match.captured("desc");
-                    object["uid"] = match.captured("uid");
-                    object["gid"] = match.captured("gid");
-                    object["home"] = match.captured("home");
-                    object["shell"] = match.captured("shell");
-                    break;
-                }
-            } while (!line.isNull());
+                object["user"] = QString(qgetenv("LOGNAME"));
+                object["desc"] = match.captured("desc");
+                object["uid"] = match.captured("uid");
+                object["gid"] = match.captured("gid");
+                object["home"] = match.captured("home");
+                object["shell"] = match.captured("shell");
+            }
         }
+        passwdFile.close();
     }
     return object;
 }
@@ -93,6 +93,20 @@ QJsonObject Processor::getUserData()
 QJsonObject Processor::getUpTime()
 {
     return upTime;
+}
+
+QJsonObject Processor::getAppUpTime()
+{
+    if(appTimer.isValid()){
+        int appUpTimeI = appTimer.elapsed();
+        int seconds = int((appUpTimeI / 1000)%60);
+        int minutes = int((appUpTimeI / (1000*60)) % 60);
+        int hours = int((appUpTimeI / (1000*60*60)) % 24);
+        appUpTime["seconds"] = QString::number(seconds).rightJustified(2, '0');
+        appUpTime["minutes"] = QString::number(minutes).rightJustified(2, '0');
+        appUpTime["hours"] =  QString::number(hours).rightJustified(2, '0');
+    }
+    return appUpTime;
 }
 
 void Processor::checkUpTime()
@@ -119,10 +133,10 @@ void Processor::checkUpTime()
                     upTime["minutes"] = int((upTimeI / 60)%60);
                     upTime["hours"] = int(upTimeI / 3600);
                 }
-                upFile.close();
                 emit worker1->setResult(QVariant(upTime));
             }
-            emit &Worker::finished;
+            upFile.close();
+            emit worker1->finished();
         });
         connect( worker1, &Worker::finished, thread1, &QThread::quit);
         connect( worker1, &Worker::finished, worker1, &Worker::deleteLater);
@@ -152,10 +166,10 @@ void Processor::checkPerformance()
                 QFile tempFile(temp);
                 if(tempFile.open(QIODevice::ReadOnly)) {
                     int temperature = QString(tempFile.readAll()).toInt() / 1000;
-                    tempFile.close();
                     emit worker1->setResult(QVariant(temperature));
                 }
-                emit &Worker::finished;
+                tempFile.close();
+                emit worker1->finished();
         });
         connect( worker1, &Worker::finished, thread1, &QThread::quit);
         connect( worker1, &Worker::finished, worker1, &Worker::deleteLater);
@@ -203,10 +217,10 @@ void Processor::checkPerformance()
                         // cpu = 100 - (float)(idle * 100) / (float)(user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice);
                     }
                     // qDebug() << "cpu" << cpu;
-                    statFile.close();
                     emit worker2->setResult(QVariant(cpu));
                 }
-                emit &Worker::finished;
+                statFile.close();
+                emit worker2->finished();
         });
         connect( worker2, &Worker::finished, thread2, &QThread::quit);
         connect( worker2, &Worker::finished, worker2, &Worker::deleteLater);
@@ -234,10 +248,10 @@ void Processor::checkPerformance()
                         ram = (float)((float)(total - free) / (float)total) * 100;
 
                     }
-                    memFile.close();
                     emit worker3->setResult(QVariant(ram));
                 }
-                emit &Worker::finished;
+                memFile.close();
+                emit worker3->finished();
         });
         connect( worker3, &Worker::finished, thread3, &QThread::quit);
         connect( worker3, &Worker::finished, worker3, &Worker::deleteLater);
@@ -278,8 +292,8 @@ void Processor::checkMails()
                     emit &Worker::finished;
             });
             connect( worker, &Worker::finished, thread, &QThread::quit);
-            connect( worker, &Worker::finished, worker, &Worker::deleteLater);
-            connect( thread, &QThread::finished, thread, &QThread::deleteLater);
+            // connect( worker, &Worker::finished, worker, &Worker::deleteLater);
+            // connect( thread, &QThread::finished, thread, &QThread::deleteLater);
             thread->start();
         }
     }

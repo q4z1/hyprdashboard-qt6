@@ -27,7 +27,7 @@ Box {
     }
 
     Timer {
-        interval: 2500; running: true; repeat: true;
+        interval: 1000; running: true; repeat: true;
         onTriggered: processor.checkPerformance()
     }
 

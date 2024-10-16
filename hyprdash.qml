@@ -20,6 +20,20 @@ Window {
 
     Component.onCompleted: { 
         console.log("hyprdash.qml loaded.")
+        if(isNerd){
+            appUpTimeText.text = "App UpTime: whatever"
+            nerdFooter.visible = true
+        }
+    }
+
+    Timer {
+        running: isNerd
+        interval: 1000; 
+        repeat: true;
+        onTriggered: {
+            let appUpTime = processor.getAppUpTime()
+            appUpTimeText.text = "App UpTime: " + appUpTime["hours"] + "h:" + appUpTime["minutes"] + "m:" + appUpTime["seconds"] + "s"
+        }
     }
 
     readonly property bool portraitMode: Screen.width < Screen.height
@@ -159,6 +173,7 @@ Window {
 
                         Mail {}
                         Performance {}
+                        Locations {}
                     }
 
                     // actions
@@ -233,21 +248,37 @@ Window {
             }
         }
 
-        // versionText
-        Text {
-            id: versionText
-            width: parent.width
-            topPadding: 12
-            bottomPadding: 12
+        // version & app uptime
+        RowLayout {
+            id: nerdFooter
+            width: parent.width - 24
+            anchors.margins: 12
+            x: 12
             y: parent.height - 36
             height: 36
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            color: Config.Settings.palette.accent.col300
-            font.family: Config.Settings.textFont.font.family
-            font.pointSize: 12
-            text: "hyprdash v0.1 beta"
+            visible: false
+
+            Text {
+                id: versionText
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter;
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                color: Config.Settings.palette.accent.col300
+                font.family: Config.Settings.textFont.font.family
+                font.pointSize: 12
+                text: "hyprdash v0.1 beta"
+            }
+
+            Text {
+                id: appUpTimeText
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
+                horizontalAlignment: Text.AlignRight
+                verticalAlignment: Text.AlignVCenter
+                color: Config.Settings.palette.accent.col300
+                font.family: Config.Settings.textFont.font.family
+                font.pointSize: 12
+                text: "App UpTime:"
+            }
         }
     }
-
 }
