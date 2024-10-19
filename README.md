@@ -8,7 +8,7 @@ Ubuntu noble: sudo apt install build-essential cmake ninja-build qt6-base-dev qt
 ## for creating a nixos qt6 dev environment there exists a flake.nix file
 
 ### Bulding & Running:
-`cmake -S. -B./build -G Ninja` # setup cmake project
+`cmake -S. -B./build -G Ninja` 
 `cmake --build ./build --config Debug --target hyprdash --` # build
 `./hyprdash.sh` # run
 
