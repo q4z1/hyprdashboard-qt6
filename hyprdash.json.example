@@ -153,5 +153,38 @@
             "colorI": "color.col700",
             "rotation": 0
         }
-    ]
+    ],
+    "locations": {
+        "fileManager": "kitty",
+        "folders": [
+            {
+                "id": "home",
+                "args": "-e nnn ~/",
+                "icon": "../resources/home.svg",
+                "color": "color.col500",
+                "label": "~/"
+            },
+            {
+                "id": "downloads",
+                "args": "-e nnn ~/Downloads",
+                "icon": "../resources/folder-download.svg",
+                "color": "color.col300",
+                "label": "~/Downloads"
+            },
+            {
+                "id": "music",
+                "args": "-e nnn ~/Music",
+                "icon": "../resources/folder-music.svg",
+                "color": "color.col700",
+                "label": "~/Music"
+            },
+            {
+                "id": "config",
+                "args": "-e nnn ~/.config",
+                "icon": "../resources/folder-settings.svg",
+                "color": "accent.col300",
+                "label": "~/config"
+            }
+        ]
+    }
 }

@@ -83,24 +83,23 @@ Box {
 
             ColumnLayout {
                 anchors.fill: parent
+                spacing: 10
 
                 Text {
-                    Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: 20
-                    horizontalAlignment: Text.AlignLeft
+                    Layout.preferredHeight: 16
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                     color: Config.Settings.palette.color.col400
                     font.family: Config.Settings.textFont.font.family
-                    font.pointSize: 20
+                    font.pointSize: 16
                     text: clock.day
                 }
 
                 Text {
-                    Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: 16
-                    horizontalAlignment: Text.AlignRight
+                    Layout.preferredHeight: 14
+                    Layout.alignment: Qt.AlignRight | Qt.AlignTop
                     color: Config.Settings.palette.color.col200
                     font.family: Config.Settings.textFont.font.family
-                    font.pointSize: 16
+                    font.pointSize: 14
                     text: clock.date
                 }
             }

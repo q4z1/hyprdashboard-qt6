@@ -97,7 +97,7 @@ Box {
                     onEntered: mailText.color = Config.Settings.palette.accent.col100
                     onExited: mailText.color = Config.Settings.palette.accent.col300
                     onClicked: { 
-                        console.log("webmail", modelData["webmail"])
+                        // console.log("webmail", modelData["webmail"])
                         processor.openUrlExternally(modelData["webmail"])
                         hyprDashboard.visibility = Window.Hidden
                     }

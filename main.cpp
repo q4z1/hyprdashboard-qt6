@@ -1,6 +1,6 @@
 // Copyright (C) 2017 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
-#include <QGuiApplication>
+#include <QApplication>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QQmlApplicationEngine>
@@ -33,9 +33,9 @@ int main(int argc, char *argv[])
 {
     qInstallMessageHandler(logToFile);
     QString appName = "hyprdash";
-    QGuiApplication app(argc, argv);
-    QGuiApplication::setApplicationName(appName);  // ~/.config file
-    QGuiApplication::setOrganizationName(appName); // ~/.config folder
+    QApplication app(argc, argv);
+    QApplication::setApplicationName(appName);  // ~/.config file
+    QApplication::setOrganizationName(appName); // ~/.config folder
 
     QCommandLineParser parser;
     parser.setApplicationDescription("Dashboard / Launcher for hyprland");

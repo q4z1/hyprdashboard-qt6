@@ -3,7 +3,7 @@ project(hyprdashboard_qt6 LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Quick QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
 qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     main.cpp
@@ -114,6 +114,8 @@ target_link_libraries(hyprdash PUBLIC
     Qt6::Network
     Qt6::Quick
     Qt6::QuickControls2
+    Qt6::Widgets
+    Qt6::QuickWidgets
 )
 
 if(UNIX AND NOT APPLE AND CMAKE_CROSSCOMPILING)

@@ -19,10 +19,12 @@ public:
     Q_INVOKABLE void checkMails();
     Q_INVOKABLE void checkPerformance();
     Q_INVOKABLE void checkUpTime();
+    Q_INVOKABLE void checkDiskSpace();
     Q_INVOKABLE QJsonObject getMails();
     Q_INVOKABLE QJsonObject getPerformance();
     Q_INVOKABLE QJsonObject getUpTime();
     Q_INVOKABLE QJsonObject getAppUpTime();
+    Q_INVOKABLE QJsonObject getDiskSpace();
 
 public slots:
     void launch(const QString &command, const QString &args);
@@ -32,17 +34,20 @@ public slots:
     void setTemp(QVariant temp);
     void setCpu(QVariant cpu);
     void setDisk(QVariant disk);
+    void setDiskSpace(QVariant diskSpace);
 
 signals:
     void mailsChanged();
     void performanceChanged();
     void upTimeChanged();
+    void diskSpaceChanged();
 
 private:
     QJsonObject mails;
     QJsonObject performance;
     QJsonObject upTime;
     QJsonObject appUpTime;
+    QJsonObject diskSpace;
     QMap<QString, int> curCpu;
 };
  
