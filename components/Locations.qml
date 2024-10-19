@@ -190,9 +190,10 @@ Box {
                                 Text {
                                     id: folderText
                                     Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                                    Layout.preferredHeight: 10
+                                    Layout.preferredHeight: 12
                                     horizontalAlignment: Text.AlignLeft
-                                    font.pointSize: 10
+                                    font.family: Config.Settings.textFont.font.family
+                                    font.pointSize: 12
                                     text: modelData["label"]
                                 }
                             }
