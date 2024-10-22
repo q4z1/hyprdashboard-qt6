@@ -15,7 +15,7 @@ Window {
     objectName: "hyprDashboard"
     visibility: Window.Hidden
     flags: Qt.FramelessWindowHint | Qt.Dialog | Qt.WindowStaysOnTopHint
-    title: qsTr("hyprdashboard - v0.1 alpha")
+    title: qsTr("hyprdashboard - v0.1 beta")
     color: "transparent"
 
     Component.onCompleted: { 

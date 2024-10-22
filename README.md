@@ -1,6 +1,8 @@
 # hyprdashboard-qt6
 Dashboard / Launcher for hyprland
 
+This project is not yet finished but maybe worth to take a look.
+
 ## Dependencies:
 Arch Linux: sudo pacman -Syu base-devel qt6-base qt6-declarative qt6-svg cmake ninja
 
