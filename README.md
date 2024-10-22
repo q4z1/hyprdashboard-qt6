@@ -30,3 +30,6 @@ and a binding to a keyboard shortcut like: `bind = $mainMod, D, exec, /path/to/h
  ## Configuration:
  copy `hyprdash.json.example` to `~/config/hyprdash/hyprdash.conf` - it should speak for itself.
 ... always keep a backup! If there is any json syntax error, the file will be overwritten.
+
+## short preview:
+check `hyprdash.mp4`
