@@ -124,34 +124,29 @@
             "id": "logout",
             "target": "hyprctl",
             "args": "dispatch exit",
-            "textI": "",
-            "colorI": "color.col900",
-            "rotation": 90
+            "icon": "../resources/logout.svg",
+            "colorI": "color.col400"
         },
         {
             "id": "suspend",
             "target": "systemctl",
             "args": "suspend",
-            "textI": "",
-            "colorI": "color.col400",
-            "sizeI": 64,
-            "rotation": 0
+            "icon": "../resources/suspend.svg",
+            "colorI": "color.col300"
         },
         {
             "id": "reboot",
             "target": "systemctl",
             "args": "reboot",
-            "textI": "",
-            "colorI": "color.col300",
-            "rotation": 0
+            "icon": "../resources/reboot.svg",
+            "colorI": "color.col600"
         },
         {
             "id": "poweroff",
             "target": "systemctl",
             "args": "poweroff",
-            "textI": "",
-            "colorI": "color.col700",
-            "rotation": 0
+            "icon": "../resources/poweroff.svg",
+            "colorI": "color.col800"
         }
     ],
     "locations": {
@@ -186,5 +181,9 @@
                 "label": "~/config"
             }
         ]
-    }
+    },
+    "rss": [
+        { "tagesschau.de - Die Nachrichten der ARD": "https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml" },
+        { "scinexx | Das Wissensmagazin": "http://feeds.feedburner.com/scinexx" }
+    ]
 }
