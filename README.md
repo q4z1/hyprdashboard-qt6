@@ -1,7 +1,7 @@
 # hyprdashboard-qt6
 Dashboard / Launcher for hyprland
 
-This project is not yet finished but maybe worth to take a look.
+This project is not yet finished but maybe worth to take a look already.
 
 ## Dependencies:
 Arch Linux: sudo pacman -Syu base-devel qt6-base qt6-declarative qt6-svg cmake ninja
@@ -11,7 +11,7 @@ Ubuntu noble: sudo apt install build-essential cmake ninja-build qt6-base-dev qt
 
 KDE neo: all qt6 deps should be either already installed or easily to install.
 
-## for creating a nixos qt6 dev environment there exists a flake.nix file
+### for creating a nixos qt6 dev environment there exists a flake.nix file
 
 ### Bulding & Running:
 `cmake -S. -B./build -G Ninja`
@@ -27,5 +27,6 @@ In your hyprland config:
 
 and a binding to a keyboard shortcut like: `bind = $mainMod, D, exec, /path/to/hyprdash.sh -d` in order to toggle dashboard.
 
- 
-
+ ## Configuration:
+ copy `hyprdash.json.example` to `~/config/hyprdash/hyprdash.conf` - it should speak for itself.
+... always keep a backup! If there is any json syntax error, the file will be overwritten.
