@@ -13,7 +13,7 @@ KDE neo: all qt6 deps should be either already installed or easily to install.
 
 ### for creating a nixos qt6 dev environment there exists a flake.nix file
 
-### Bulding & Running:
+### Building & Running:
 `cmake -S. -B./build -G Ninja`
 
 `cmake --build ./build --config Debug --target hyprdash --` # build - chose a different --config value for a Release build
