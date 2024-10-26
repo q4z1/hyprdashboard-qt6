@@ -176,30 +176,39 @@ Window {
                         Locations {}
                     }
 
-                    // actions
-                    GridLayout {
+                    // actions , rss
+                    ColumnLayout {
+                        Layout.preferredWidth: 290
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                        columns: 2
-                        columnSpacing: 15
-                        rowSpacing: 15
+                        spacing: 15
+                        
+                        GridLayout {
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                            columns: 2
+                            columnSpacing: 15
+                            rowSpacing: 15
 
-                        property var actionButtons
-                        Component.onCompleted: { 
-                            actionButtons = gSettings.getValue("actionButtons") 
-                        }
+                            property var actionButtons
+                            Component.onCompleted: { 
+                                actionButtons = gSettings.getValue("actionButtons") 
+                            }
 
-                        Repeater {
-                            model: parent.actionButtons
-                            ActionButton {
-                                required property var modelData
-                                objectName: modelData["id"]
-                                icon: modelData["icon"]
-                                colorI: modelData["colorI"]
-                                target: modelData["target"]
-                                args: modelData["args"] ? modelData["args"] : null
+                            Repeater {
+                                model: parent.actionButtons
+                                ActionButton {
+                                    required property var modelData
+                                    objectName: modelData["id"]
+                                    icon: modelData["icon"]
+                                    colorI: modelData["colorI"]
+                                    target: modelData["target"]
+                                    args: modelData["args"] ? modelData["args"] : null
+                                }
                             }
                         }
-                     }
+
+                        RssReader {}
+                    }
+                  
                 }
 
                 // tile launchers

@@ -1,3 +1,4 @@
+
 function getWeather(url) {
     var doc = new XMLHttpRequest();
     doc.onreadystatechange = function () {

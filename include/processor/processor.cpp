@@ -174,7 +174,7 @@ void Processor::checkDiskSpace()
                             if (match.hasMatch())
                             {
                                 QList dfAll = match.captured("root").split(u' ', Qt::SkipEmptyParts);
-                                qDebug() << "dfAll" << dfAll;
+                                // qDebug() << "dfAll" << dfAll;
                                 
                                 emit worker1->setResult(QVariant(QJsonObject{
                                         {"total", dfAll[1].toInt() / (1024*1024)},

@@ -1,6 +1,10 @@
-User            User.qml
-Box             Box.qml
-TileLauncher    TileLauncher.qml
-AppLauncher     AppLauncher.qml
-Clock        Clock.qml
 ActionButton    ActionButton.qml
+AppLauncher     AppLauncher.qml
+Box             Box.qml
+Clock           Clock.qml
+Locations       Locations.qml
+Mail            Mail.qml
+TileLauncher    TileLauncher.qml
+UpTime          UpTime.qml
+User            User.qml
+Weather         Weather.qml

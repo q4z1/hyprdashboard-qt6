@@ -21,12 +21,18 @@ Box {
         function onDiskSpaceChanged() { 
             let diskSpace = processor.getDiskSpace()
             pieFree.value = diskSpace["free"]
-            freeText.text = diskSpace["free"] + "GB"
+            freeText.text = diskSpace["free"] + "G"
             pieUsed.value = diskSpace["used"]
-            totalText.text = diskSpace["total"] + "GB"
-            usedText.text = diskSpace["used"] + "GB"
-            console.log(JSON.stringify(diskSpace))
+            totalText.text = diskSpace["total"] + "G"
+            usedText.text = diskSpace["used"] + "G"
+            // console.log(JSON.stringify(diskSpace))
         }
+    }
+
+
+    Timer {
+        interval: 1000; running: true; repeat: true;
+        onTriggered: processor.checkDiskSpace()
     }
 
     property var locations

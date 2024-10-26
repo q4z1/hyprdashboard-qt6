@@ -186,5 +186,9 @@
                 "label": "~/config"
             }
         ]
-    }
+    },
+    "rss": [
+        { "tagesschau": "https://www.tagesschau.de/infoservices/alle-meldungen-100~rss2.xml" },
+        { "scinexx": "http://feeds.feedburner.com/scinexx" }
+    ]
 }
