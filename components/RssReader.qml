@@ -5,7 +5,6 @@ import QtQuick.Effects
 
 import "../components"
 import "../config" as Config
-import "../js/xml2json.js" as Xml2Json
 
 Box {
     id: rssReaderBox
@@ -15,7 +14,7 @@ Box {
 
         function onFeedsChanged() { 
             feeds = processor.getFeeds()
-            console.log("feedsChanged", JSON.stringify(feeds))
+            console.log("feeds", JSON.stringify(feeds))
         }
     }
 
@@ -25,8 +24,11 @@ Box {
     }
 
     property var feeds
+    property var feedSettings
     Component.onCompleted: { 
         processor.checkFeeds()
+        feedSettings = gSettings.getValue("rss")
+        console.log(JSON.stringify(feedSettings))
     }
 
     Layout.preferredWidth: 305

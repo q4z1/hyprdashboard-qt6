@@ -55,6 +55,7 @@ private:
     QJsonObject appUpTime;
     QJsonObject diskSpace;
     QMap<QString, int> curCpu;
+    QNetworkAccessManager manager;
     QNetworkRequest request;
 };
  

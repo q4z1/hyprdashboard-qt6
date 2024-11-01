@@ -49,7 +49,6 @@ qt_add_qml_module(hyprdash
         "components/qmldir"
         "config/qmldir"
         "js/helpers.js"
-        "js/xml2json.js"
         "resources/bg.png"
         "resources/blueman.png"
         "resources/code.svg"

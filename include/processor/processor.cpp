@@ -35,7 +35,7 @@ Processor::Processor()
         {"hours", "00"},
         {"minutes", "00"},
         {"seconds", "00"}};
-    
+
     feeds = QJsonObject{};
 }
 
@@ -196,6 +196,15 @@ void Processor::checkDiskSpace()
     }
 }
 
+inline bool isStartElementOfChannel(const QXmlStreamReader &xmlIterator)
+{
+    return xmlIterator.isStartElement() && xmlIterator.name() == QString("channel");
+}
+inline bool isItemElement(const QXmlStreamReader &xmlIterator)
+{
+    return xmlIterator.name() == QString("item");
+}
+
 QJsonObject Processor::getFeeds()
 {
     return feeds;
@@ -203,53 +212,70 @@ QJsonObject Processor::getFeeds()
 
 void Processor::checkFeeds()
 {
-   QSettings settings;
-
+    QSettings settings;
     if (settings.contains("rss"))
     {
+
+        QObject::connect(&manager, &QNetworkAccessManager::finished,
+            this, [=](QNetworkReply *reply) {
+                if (reply->error()) {
+                    qDebug() << reply->errorString();
+                    return;
+                }
+                // qDebug() << "request url=" << reply->url();
+                QString response = reply->readAll();
+                QXmlStreamReader xml(response);
+                // qDebug() << "xml=" << response;
+                QJsonArray feedsArray;
+                QString currentTag, linkString, titleString, descString;
+                while (!xml.atEnd()) {
+                    xml.readNext();
+                    if (xml.isStartElement()) {
+                        if (xml.name() == u"item") {
+                            linkString = xml.attributes().value("rss:about").toString();
+                            titleString.clear();
+                            descString.clear();
+                        }
+                        currentTag = xml.name().toString();
+                    } else if (xml.isEndElement()) {
+                        if (xml.name() == u"item") {
+                            feedsArray.append(QJsonObject {
+                                {"title", titleString},
+                                {"link", linkString},
+                                {"description", descString}
+                            });
+                        }
+                    } else if (xml.isCharacters() && !xml.isWhitespace()) {
+                        if (currentTag == "title")
+                            titleString += xml.text();
+                        else if (currentTag == "link")
+                            linkString += xml.text();
+                        else if (currentTag == "description")
+                            descString += xml.text();
+                    }
+                }
+                if (xml.error() && xml.error() != QXmlStreamReader::PrematureEndOfDocumentError)
+                    qDebug() << "XML ERROR:" << xml.lineNumber() << ": " << xml.errorString();
+                setFeed(QVariant(QJsonObject{
+                        {reply->url().toString(), feedsArray}
+                    }));
+                reply->close();
+                reply->deleteLater();
+            }
+        );  
+
         QJsonArray rssFeeds = QJsonValue::fromVariant(settings.value("rss")).toArray();
         // qDebug() << "checkFeeds(): " << rssFeeds;
         QJsonArray::iterator i;
         for (i = rssFeeds.begin(); i != rssFeeds.end(); ++i)
         {
             QJsonObject feed = (*i).toObject();
-            // qDebug() << "feed:" << feed;
-            QThread *thread = new QThread();
-            Worker *worker = new Worker();
-            worker->moveToThread(thread);
-            connect(worker, &Worker::error, this, [](QString error)
-                    { qDebug() << "worker error:" << error; });
-            connect(worker, &Worker::setResult, this, &Processor::setFeed);
-            connect(thread, &QThread::started, worker, [this, feed, worker]()
-                    {   
-                        // qDebug() << "worker running feed:" << feed; 
-                        QNetworkAccessManager *manager = new QNetworkAccessManager();
-                        QObject::connect(manager, &QNetworkAccessManager::finished,
-                            this, [=](QNetworkReply *reply) {
-                                if (reply->error()) {
-                                    qDebug() << reply->errorString();
-                                    emit &Worker::finished; 
-                                    return;
-                                }
-                                QString answer = reply->readAll();
-                                // qDebug() << "response:" << answer;
-                                emit worker->setResult(QVariant(QJsonObject{
-                                        {feed.keys().first(), answer}
-                                    }));
-                                emit worker->finished();
-                            }
-                        );  
-                        request.setUrl(QUrl((feed[feed.keys().first()].toString())));
-                        manager->get(request);
-                    });
-            connect(worker, &Worker::finished, thread, &QThread::quit);
-            connect( worker, &Worker::finished, worker, &Worker::deleteLater);
-            connect( thread, &QThread::finished, thread, &QThread::deleteLater);
-            thread->start();
+            
+            request.setUrl(QUrl((feed[feed.keys().first()].toString())));
+            manager.get(request); 
         }
     }
 }
-
 
 QJsonObject Processor::getPerformance()
 {
@@ -404,8 +430,8 @@ void Processor::checkMails()
                     imap->run();
                     emit &Worker::finished; });
             connect(worker, &Worker::finished, thread, &QThread::quit);
-            connect( worker, &Worker::finished, worker, &Worker::deleteLater);
-            connect( thread, &QThread::finished, thread, &QThread::deleteLater);
+            connect(worker, &Worker::finished, worker, &Worker::deleteLater);
+            connect(thread, &QThread::finished, thread, &QThread::deleteLater);
             thread->start();
         }
     }
@@ -462,13 +488,27 @@ void Processor::setDiskSpace(QVariant dS)
 
 void Processor::setFeed(QVariant feed)
 {
-    qDebug() << "setFeed()" << feed;
-    // QMapIterator<QString, QVariant> i(dS.toMap());
-    // while (i.hasNext())
-    // {
-    //     i.next();
-    //     diskSpace[i.key()] = QJsonValue::fromVariant(i.value());
-    // }
+    // qDebug() << "setFeed()" << feed;
+    QSettings settings;
+    QJsonArray rssFeeds = QJsonValue::fromVariant(settings.value("rss")).toArray();
+    QMapIterator<QString, QVariant> i(feed.toMap());
+    while (i.hasNext())
+    {
+        i.next();
+        QString key, url;
+        QJsonArray::iterator a;
+        for (a = rssFeeds.begin(); a != rssFeeds.end(); ++a)
+        {
+            QJsonObject feedSet = (*a).toObject();
+            key = feedSet.keys().first();
+            url = feedSet[feedSet.keys().first()].toString();
+            // qDebug() << key << url;
+            if(i.key() == url) {
+                feeds[key] = QJsonValue::fromVariant(i.value());
+                break;
+            }
+        }
+    }
     emit feedsChanged();
 }
 
