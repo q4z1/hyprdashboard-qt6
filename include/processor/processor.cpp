@@ -224,41 +224,47 @@ void Processor::checkFeeds()
                 }
                 // qDebug() << "request url=" << reply->url();
                 QString response = reply->readAll();
-                QXmlStreamReader xml(response);
-                // qDebug() << "xml=" << response;
-                QJsonArray feedsArray;
-                QString currentTag, linkString, titleString, descString;
-                while (!xml.atEnd()) {
-                    xml.readNext();
-                    if (xml.isStartElement()) {
-                        if (xml.name() == u"item") {
-                            linkString = xml.attributes().value("rss:about").toString();
-                            titleString.clear();
-                            descString.clear();
+                if(response != ""){
+                    QXmlStreamReader xml(response);
+                    // qDebug() << "xml=" << response;
+                    QJsonArray feedsArray;
+                    QString currentTag, linkString, titleString, descString;
+                    while (!xml.atEnd()) {
+                        xml.readNext();
+                        if (xml.isStartElement()) {
+                            if (xml.name() == u"item") {
+                                linkString = xml.attributes().value("rss:about").toString();
+                                titleString.clear();
+                                descString.clear();
+                            }
+                            currentTag = xml.name().toString();
+                        } else if (xml.isEndElement()) {
+                            if (xml.name() == u"item") {
+                                feedsArray.append(QJsonObject {
+                                    {"title", titleString},
+                                    {"link", linkString},
+                                    {"description", descString}
+                                });
+                            }
+                        } else if (xml.isCharacters() && !xml.isWhitespace()) {
+                            if (currentTag == "title")
+                                titleString += xml.text();
+                            else if (currentTag == "link")
+                                linkString += xml.text();
+                            else if (currentTag == "description")
+                                descString += xml.text();
                         }
-                        currentTag = xml.name().toString();
-                    } else if (xml.isEndElement()) {
-                        if (xml.name() == u"item") {
-                            feedsArray.append(QJsonObject {
-                                {"title", titleString},
-                                {"link", linkString},
-                                {"description", descString}
-                            });
-                        }
-                    } else if (xml.isCharacters() && !xml.isWhitespace()) {
-                        if (currentTag == "title")
-                            titleString += xml.text();
-                        else if (currentTag == "link")
-                            linkString += xml.text();
-                        else if (currentTag == "description")
-                            descString += xml.text();
+                    }
+                    if (xml.error() && xml.error() != QXmlStreamReader::PrematureEndOfDocumentError)
+                        qDebug() << "XML ERROR:" << xml.lineNumber() << ": " << xml.errorString();
+                    else{
+                        setFeed(QVariant(QJsonObject{
+                                {reply->url().toString(), feedsArray}
+                            })
+                        );
                     }
                 }
-                if (xml.error() && xml.error() != QXmlStreamReader::PrematureEndOfDocumentError)
-                    qDebug() << "XML ERROR:" << xml.lineNumber() << ": " << xml.errorString();
-                setFeed(QVariant(QJsonObject{
-                        {reply->url().toString(), feedsArray}
-                    }));
+ 
                 reply->close();
                 reply->deleteLater();
             }
@@ -270,7 +276,6 @@ void Processor::checkFeeds()
         for (i = rssFeeds.begin(); i != rssFeeds.end(); ++i)
         {
             QJsonObject feed = (*i).toObject();
-            
             request.setUrl(QUrl((feed[feed.keys().first()].toString())));
             manager.get(request); 
         }
@@ -502,14 +507,18 @@ void Processor::setFeed(QVariant feed)
             QJsonObject feedSet = (*a).toObject();
             key = feedSet.keys().first();
             url = feedSet[feedSet.keys().first()].toString();
-            // qDebug() << key << url;
-            if(i.key() == url) {
-                feeds[key] = QJsonValue::fromVariant(i.value());
+            QVariant items = i.value();
+            QJsonValue jItems = QJsonValue::fromVariant(items);
+            // qDebug() << "items valid" << items.isValid();
+            // qDebug() << "items null" << items.isNull();
+            // items QJsonValue(array, QJsonArray())
+            if(i.key() == url ) {
+                feeds[key] = jItems;
+                emit feedsChanged();
                 break;
             }
         }
     }
-    emit feedsChanged();
 }
 
 void Processor::launch(const QString &command, const QString &arguments)

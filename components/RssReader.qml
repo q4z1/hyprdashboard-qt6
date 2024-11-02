@@ -14,7 +14,9 @@ Box {
 
         function onFeedsChanged() { 
             feeds = processor.getFeeds()
-            console.log("feeds", JSON.stringify(feeds))
+            feedsContent.model = feeds
+            // console.log("feeds", JSON.stringify(feeds))
+            // console.log("feedSettings", JSON.stringify(feedSettings))
         }
     }
 
@@ -27,13 +29,44 @@ Box {
     property var feedSettings
     Component.onCompleted: { 
         processor.checkFeeds()
-        feedSettings = gSettings.getValue("rss")
-        console.log(JSON.stringify(feedSettings))
+        let fS = gSettings.getValue("rss")
+        feedSettings = []
+        for(let i in fS){
+            let entries = Object.entries(fS[i])
+            feedSettings.push(entries[0][0])
+        }
+        rssBar.model = feedSettings
+        // console.log("feedSettings", feedSettings)
     }
 
     Layout.preferredWidth: 305
-    Layout.minimumHeight: 290
+    Layout.preferredHeight: 215
     Layout.alignment: Qt.AlignTop
+
+    Item {
+        anchors.centerIn: parent
+        width: parent.width - 20
+        height: parent.height - 30
+
+        RssTabBar {
+            id: rssBar
+        }
+
+        StackLayout {
+            width: parent.width
+            currentIndex: rssBar.currentIndex
+            Repeater {
+                id: feedsContent
+                Item {
+                    // id: modelData.keys()[0]
+                    Text {
+                        text: modelData
+                    }
+                }
+            }
+        }
+    }
+
 
 
 }

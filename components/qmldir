@@ -4,6 +4,8 @@ Box             Box.qml
 Clock           Clock.qml
 Locations       Locations.qml
 Mail            Mail.qml
+RssReader       RssReader.qml
+RssTabBar       RssTabBar.qml
 TileLauncher    TileLauncher.qml
 UpTime          UpTime.qml
 User            User.qml

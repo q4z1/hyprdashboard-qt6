@@ -40,6 +40,7 @@ qt_add_qml_module(hyprdash
         "components/Mail.qml"
         "components/Performance.qml"
         "components/RssReader.qml"
+        "components/RssTabBar.qml"
         "components/TileLauncher.qml"
         "components/UpTime.qml"
         "components/User.qml"
