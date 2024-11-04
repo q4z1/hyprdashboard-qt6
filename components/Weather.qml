@@ -92,14 +92,14 @@ Box {
 
         Text {
             id: weatherDesc
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.alignment: Qt.AlignRight | Qt.AlignTop
             Layout.preferredWidth: parent.width
             Layout.fillHeight: true
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignTop
             color: Config.Settings.palette.color.col700
             font.family: Config.Settings.textFont.font.family
-            font.pointSize: 18
+            font.pointSize: 20
         }
 
         RowLayout {

@@ -14,9 +14,14 @@ Box {
 
         function onFeedsChanged() { 
             feeds = processor.getFeeds()
-            feedsContent.model = feeds
-            // console.log("feeds", JSON.stringify(feeds))
-            // console.log("feedSettings", JSON.stringify(feedSettings))
+            for(let i in feedSettings){
+                let entries = Object.entries(feedSettings[i])
+                let key = entries[0][0]
+                if(key != 0 && typeof feeds[key] === 'undefined')
+                    feeds[key] = []
+            }
+            feedsContent.model = feedSettings
+            feedsContent.updateFeeds()
         }
     }
 
@@ -43,7 +48,7 @@ Box {
     Layout.preferredHeight: 215
     Layout.alignment: Qt.AlignTop
 
-    Item {
+    ColumnLayout {
         anchors.centerIn: parent
         width: parent.width - 20
         height: parent.height - 30
@@ -53,15 +58,66 @@ Box {
         }
 
         StackLayout {
-            width: parent.width
             currentIndex: rssBar.currentIndex
             Repeater {
                 id: feedsContent
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.height
+                signal updateFeeds
+
+                onUpdateFeeds: {
+                    // console.log("onUpdateFeeds", JSON.stringify(feeds))
+                    // feedRow.model = feeds[modelData]
+                }
+
                 Item {
-                    // id: modelData.keys()[0]
-                    Text {
-                        text: modelData
+                    Layout.preferredWidth: parent.width
+                    Layout.preferredHeight: parent.height
+
+                    ColumnLayout {
+                        width: parent.width
+                       
+                        Repeater{
+                            id: feedRow
+                            model: feeds[modelData]
+                           
+                            Column {
+                                id: feedItem
+                                Layout.preferredWidth: 285
+                                Layout.maximumWidth: 285
+                                Layout.maximumHeight: 36
+                                spacing: 2
+                                required property string title
+                                required property string description
+                                required property string link
+                                Text {
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    wrapMode: Text.WordWrap
+                                    height: 12
+                                    text: title
+                                    color: Config.Settings.palette.accent.col200
+                                    font.bold: true
+                                    font.pointSize: 8
+                                    elide: Text.ElideRight
+                                }
+                                Text {
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    wrapMode: Text.WordWrap
+                                    height: 12
+                                    text: description
+                                    color: Config.Settings.palette.accent.col300
+                                    font.pointSize: 8
+                                    elide: Text.ElideRight
+                                }
+                            }
+                            Component.onCompleted: { 
+                                // console.log("feeds[modelData]", JSON.stringify(feeds[modelData]))
+                            }
+                        }
                     }
+
                 }
             }
         }

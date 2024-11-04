@@ -9,7 +9,7 @@ TabBar {
 
     property alias model: tabButtons.model
 
-    anchors.fill: parent
+    Layout.preferredWidth: parent.width
     currentIndex: 0
 
     background: Rectangle {

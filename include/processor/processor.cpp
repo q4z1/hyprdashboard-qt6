@@ -509,8 +509,6 @@ void Processor::setFeed(QVariant feed)
             url = feedSet[feedSet.keys().first()].toString();
             QVariant items = i.value();
             QJsonValue jItems = QJsonValue::fromVariant(items);
-            // qDebug() << "items valid" << items.isValid();
-            // qDebug() << "items null" << items.isNull();
             // items QJsonValue(array, QJsonArray())
             if(i.key() == url ) {
                 feeds[key] = jItems;
