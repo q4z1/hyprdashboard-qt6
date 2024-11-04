@@ -33,4 +33,4 @@ and a binding to a keyboard shortcut like: `bind = $mainMod, D, exec, /path/to/h
 ... always keep a backup! If there is any json syntax error, the file will be overwritten.
 
 ## short preview:
-check `hyprdash.mp4`
+check `preview.mp4`
