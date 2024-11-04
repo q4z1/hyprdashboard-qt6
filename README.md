@@ -7,7 +7,7 @@ This project is not yet finished but maybe worth to take a look already.
 Arch Linux: `sudo pacman -Syu base-devel qt6-base qt6-declarative qt6-svg cmake ninja`
 
 Ubuntu noble: `sudo apt install build-essential cmake ninja-build qt6-base-dev qt6-declarative-dev qml-module-qtquick2 libgl1-mesa-dev libxkbcommon-dev`
-(there is still a qt6 dependency issue: although the binary compiles successfullly on ubuntu, it does not launch - it's on my #todo list ;-) - please use a distrobox to build and run on arch instead if possible)
+(there is still a qt6 dependency issue: although the binary compiles successfullly on ubuntu, it does not launch - it's on my #todo list ;-) - please use a distrobox to build and run on arch instead or post a solution in the issue tracker.)
 
 KDE neo: all qt6 deps should be either already installed or easily to install.
 
