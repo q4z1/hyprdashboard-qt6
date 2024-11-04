@@ -19,6 +19,7 @@ KDE neo: all qt6 deps should be either already installed or easily to install.
 `cmake --build ./build --config Debug --target hyprdash --` # build - chose a different --config value for a Release build
 
 `./hyprdash.sh -s` to bring up a socket server for receiving commands
+
 `./hyprdash.sh -d` to toggle dashboard
 
 In your hyprland config:
