@@ -178,7 +178,7 @@
                 "args": "-e nnn ~/.config",
                 "icon": "../resources/folder-settings.svg",
                 "color": "accent.col300",
-                "label": "~/config"
+                "label": "~/.config"
             }
         ]
     },
