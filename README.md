@@ -29,7 +29,7 @@ In your hyprland config:
 and a binding to a keyboard shortcut like: `bind = $mainMod, D, exec, /path/to/hyprdash.sh -d` in order to toggle dashboard.
 
  ## Configuration:
- copy `hyprdash.json.example` to `~/config/hyprdash/hyprdash.json` - it should speak for itself.
+ copy `hyprdash.json.example` to `~/.config/hyprdash/hyprdash.json` - it should speak for itself.
 ... always keep a backup! If there is any json syntax error, the file will be overwritten.
 
 ## short preview:
