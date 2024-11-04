@@ -16,7 +16,7 @@ KDE neo: all qt6 deps should be either already installed or easily to install.
 ## Building & Running:
 `cmake -S. -B./build -G Ninja`
 
-`cmake --build ./build --config Debug --target hyprdash --` # build - chose a different --config value for a Release build
+`cmake --build ./build --config Debug --target hyprdash --`
 
 `./hyprdash.sh -s` to bring up a socket server for receiving commands
 
