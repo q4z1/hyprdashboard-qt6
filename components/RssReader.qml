@@ -67,12 +67,21 @@ Box {
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: parent.height
 
-
-
                     ScrollView {
                         anchors.fill: parent
 
                         ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+
+                        ScrollBar.vertical.contentItem: Rectangle {
+                            implicitWidth: 8
+                            color: Config.Settings.palette.accent.col200
+                        }
+
+                        ScrollBar.vertical.background: Rectangle {
+                            anchors.fill: parent
+                            color: Config.Settings.palette.accent.col400
+                        }
+
                         ColumnLayout {
                             width: parent.width
                         
@@ -80,35 +89,65 @@ Box {
                                 id: feedRow
                                 model: feeds[modelData]
                             
-                                Column {
-                                    id: feedItem
+                                Rectangle {
+                                    id: feedRect
+                                    color: "transparent"
                                     Layout.preferredWidth: 285
                                     Layout.maximumWidth: 285
-                                    Layout.maximumHeight: 36
-                                    spacing: 2
+                                    Layout.preferredHeight: 24
+                                    Layout.topMargin: 2
                                     required property string title
                                     required property string description
                                     required property string link
-                                    Text {
-                                        anchors.left: parent.left
-                                        anchors.right: parent.right
-                                        wrapMode: Text.WordWrap
-                                        height: 12
-                                        text: title
-                                        color: Config.Settings.palette.accent.col200
-                                        font.bold: true
-                                        font.pointSize: 8
-                                        elide: Text.ElideRight
+                                    Column {
+                                        id: feedItem
+                                        anchors.fill: parent
+                                        spacing: 2
+
+                                        Text {
+                                            id: feedTitle
+                                            anchors.left: parent.left
+                                            anchors.right: parent.right
+                                            wrapMode: Text.WordWrap
+                                            padding: 3
+                                            height: 12
+                                            text: title
+                                            color: Config.Settings.palette.accent.col300
+                                            font.bold: true
+                                            font.pointSize: 8
+                                            elide: Text.ElideRight
+                                        }
+                                        Text {
+                                            id: feedDesc
+                                            anchors.left: parent.left
+                                            anchors.right: parent.right
+                                            wrapMode: Text.WordWrap
+                                            padding: 3
+                                            height: 12
+                                            text: description
+                                            color: Config.Settings.palette.accent.col400
+                                            font.pointSize: 8
+                                            elide: Text.ElideRight
+                                        }
                                     }
-                                    Text {
-                                        anchors.left: parent.left
-                                        anchors.right: parent.right
-                                        wrapMode: Text.WordWrap
-                                        height: 12
-                                        text: description
-                                        color: Config.Settings.palette.accent.col300
-                                        font.pointSize: 8
-                                        elide: Text.ElideRight
+                                    MouseArea {
+                                        id: mouseArea
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: { 
+                                            processor.openUrlExternally(link)
+                                            hyprDashboard.visibility = Window.Hidden
+                                        }
+                                        onEntered: {
+                                            feedDesc.color = Config.Settings.palette.accent.col300
+                                            feedTitle.color = Config.Settings.palette.accent.col100
+
+                                        }
+                                        onExited: {
+                                            feedDesc.color = Config.Settings.palette.accent.col400
+                                            feedTitle.color = Config.Settings.palette.accent.col300
+                                        }
                                     }
                                 }
                             }
