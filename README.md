@@ -11,7 +11,7 @@ Ubuntu noble: `sudo apt install build-essential cmake ninja-build qt6-base-dev q
 
 KDE neo: all qt6 deps should be either already installed or easily to install.
 
-## Easy builds:
+## Short builds:
 
 nix: copy `flake.nix` and `build.nix` into an empty folder. Run `nix build` inside that folder - after building you can find the binary in `./result/bin` ... use this binary directly without using hyprdash.sh as a bridge in your `hyprdash.conf`.
 
