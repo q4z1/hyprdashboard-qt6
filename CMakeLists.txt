@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.16)
 project(hyprdashboard_qt6 LANGUAGES CXX)
 
+qt_standard_project_setup(REQUIRES 6.5)
+
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
-set(RPATH ${CMAKE_INSTALL_PREFIX}/lib)
+if(UNIX AND NOT APPLE AND CMAKE_CROSSCOMPILING)
+    find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
+endif()
 
 qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     main.cpp
@@ -113,11 +117,6 @@ qt_add_qml_module(hyprdash
         "qtquickcontrols2.conf"
 )
 
-set_target_properties(hyprdash
-       PROPERTIES
-       LINK_FLAGS "-Wl,-rpath,${RPATH}"
-)
-
 target_link_libraries(hyprdash PUBLIC
     Qt6::Core
     Qt6::Gui
@@ -127,10 +126,6 @@ target_link_libraries(hyprdash PUBLIC
     Qt6::Widgets
     Qt6::QuickWidgets
 )
-
-if(UNIX AND NOT APPLE AND CMAKE_CROSSCOMPILING)
-    find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
-endif()
 
 install(TARGETS hyprdash
     BUNDLE  DESTINATION .
