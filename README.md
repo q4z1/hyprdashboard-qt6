@@ -38,5 +38,5 @@ and a binding to a keyboard shortcut like: `bind = $mainMod, D, exec, /path/to/h
  copy `hyprdash.json.example` to `~/.config/hyprdash/hyprdash.json` - it should speak for itself.
 ... always keep a backup! If there is any json syntax error, the file will be overwritten.
 
-## short preview:
+## preview:
 check `preview.mp4`
