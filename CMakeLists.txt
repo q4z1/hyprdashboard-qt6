@@ -5,6 +5,8 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
+list( APPEND CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib )
+
 qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     main.cpp
     include/config/globals.h
@@ -124,8 +126,6 @@ target_link_libraries(hyprdash PUBLIC
 if(UNIX AND NOT APPLE AND CMAKE_CROSSCOMPILING)
     find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
 endif()
-
-list( APPEND CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib )
 
 install(TARGETS hyprdash
     BUNDLE  DESTINATION .
