@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
 set(RPATH ${CMAKE_INSTALL_PREFIX}/lib)
-set_target_properties(hyprdashboard_qt6
+set_target_properties(hyprdash
        PROPERTIES
        LINK_FLAGS "-Wl,-rpath,${RPATH}"
 )
