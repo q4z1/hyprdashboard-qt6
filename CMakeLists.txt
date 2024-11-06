@@ -6,10 +6,6 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
 set(RPATH ${CMAKE_INSTALL_PREFIX}/lib)
-set_target_properties(hyprdash
-       PROPERTIES
-       LINK_FLAGS "-Wl,-rpath,${RPATH}"
-)
 
 qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     main.cpp
@@ -115,6 +111,11 @@ qt_add_qml_module(hyprdash
         "resources/openweather/1232n.svg"
         "qmldir"
         "qtquickcontrols2.conf"
+)
+
+set_target_properties(hyprdash
+       PROPERTIES
+       LINK_FLAGS "-Wl,-rpath,${RPATH}"
 )
 
 target_link_libraries(hyprdash PUBLIC
