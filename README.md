@@ -11,7 +11,8 @@ Ubuntu noble: `sudo apt install build-essential cmake ninja-build qt6-base-dev q
 
 KDE neo: all qt6 deps should be either already installed or easily to install.
 
-### for creating a nixos qt6 dev environment there exists a flake.nix file
+NixOs: copy `flake.nix` and `build.nix` into an empty folder. Run `nix build` inside that folder - after building you can find the binary in `./result/bin`
+
 
 ## Building & Running:
 `cmake -S. -B./build -G Ninja`
