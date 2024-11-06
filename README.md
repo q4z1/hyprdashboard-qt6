@@ -26,6 +26,8 @@ flatpak: run `flatpak-builder --force-clean --user --install-deps-from=flathub -
 
 `./hyprdash.sh -d` to toggle dashboard
 
+## hyprland:
+
 In your hyprland config:
 
 `exec-once /path/to/hyprdash.sh -s`
