@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
 if(UNIX AND NOT APPLE AND CMAKE_CROSSCOMPILING)
-    find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
+    find_package(Qt6 6.5 REQUIRED COMPONENTS QuickTemplates2)
 endif()
 
 qt_standard_project_setup(REQUIRES 6.5)
