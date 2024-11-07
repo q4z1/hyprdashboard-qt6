@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
+project(hyprdashboard_qt6 LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
+
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set_target_properties(hyprdash PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
