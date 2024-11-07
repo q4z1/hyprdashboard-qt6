@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.16)
-project(hyprdashboard_qt6 LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
