@@ -15,7 +15,7 @@ KDE neo: all qt6 deps should be either already installed or easily to install.
 
 nix: copy `flake.nix` and `build.nix` into an empty folder. Run `nix build` inside that folder - after building you can find the binary in `./result/bin` ... use this binary directly/instead of using below mentioned `hyprdash.sh` as a bridge in your hyprland config.
 
-flatpak: run `flatpak-builder --force-clean --user --install-deps-from=flathub --repo=repo --install builddir de.inquies.hyprdash.yml` ... result is inside of builddir # UNFINISHED
+flatpak: run `flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo` and `flatpak-builder --force-clean --user --install-deps-from=flathub --repo=repo --install builddir de.inquies.hyprdash.yml` ... result is inside of builddir # UNFINISHED
 
 ## Building & Running (other than nix and flatpak):
 `cmake -S. -B./build -G Ninja`
