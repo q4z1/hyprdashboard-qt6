@@ -3,7 +3,7 @@ project(hyprdashboard_qt6 LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
 if(UNIX AND NOT APPLE AND CMAKE_CROSSCOMPILING)
     find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
