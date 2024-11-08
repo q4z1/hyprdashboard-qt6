@@ -1,17 +1,15 @@
 cmake_minimum_required(VERSION 3.16)
-project(hyprdashboard_qt6 LANGUAGES CXX)
+project(hyprdash LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets QuickWidgets Network Quick QuickControls2)
 
 if(UNIX AND NOT APPLE AND CMAKE_CROSSCOMPILING)
-    find_package(Qt6 6.5 REQUIRED COMPONENTS QuickTemplates2)
+    find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
 endif()
 
-qt_standard_project_setup(REQUIRES 6.5)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
 qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     main.cpp
@@ -29,8 +27,6 @@ qt_add_executable(hyprdash WIN32 MACOSX_BUNDLE
     include/socket/imap.h
     include/socket/imap.cpp
 )
-
-set_target_properties(hyprdash PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 set(qml_singletons
     config/Settings.qml
