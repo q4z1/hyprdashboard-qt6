@@ -1,4 +1,4 @@
-import QtQuick 6.5
+import QtQuick 6.2
 import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts

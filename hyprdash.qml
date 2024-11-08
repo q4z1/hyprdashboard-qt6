@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtCore
-import QtQuick 6.5
+import QtQuick 6.2
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
