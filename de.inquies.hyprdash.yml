@@ -1,7 +1,7 @@
-id: org.flatpak.qtdemo
-runtime: org.kde.Platform
-runtime-version: '5.15-22.08'
-sdk: org.kde.Sdk
+id: de.inquies.hyprdash
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
 command: hyprdash
 finish-args:
   - --share=ipc
@@ -9,10 +9,25 @@ finish-args:
   - --socket=wayland
   - --device=dri
 modules:
+  - name: qt
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://download.qt.io/official_releases/qt/6.5/6.5.3/single/qt-everywhere-src-6.5.3.tar.xz
+        sha256: "7cda4d119aad27a3887329cfc285f2aba5da85601212bcb0aea27bd6b7b544cb"
+    build-options:
+      build-args:
+        - "--share=network"
+      env:
+        PATH: "/app/bin:/usr/bin:/app/lib/"
+    build-commands:
+      - ./configure
+      - cmake --build . --parallel
+      - cmake --install .
   - name: hyprdash
     buildsystem: cmake-ninja
     config-opts:
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DCMAKE_BUILD_TYPE=MinSizeRel
     sources:
       - type: git
         url: https://github.com/q4z1/hyprdashboard-qt6
