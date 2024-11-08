@@ -4,7 +4,6 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 
-#include <QDebug>
 
 class Server : public QObject
 {

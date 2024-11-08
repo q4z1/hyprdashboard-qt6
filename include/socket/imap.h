@@ -6,7 +6,6 @@
 #include <QSslSocket>
 #include <QThread>
 
-#include <QDebug>
 
 class Imap : public QObject
 {

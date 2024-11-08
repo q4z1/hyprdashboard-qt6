@@ -19,7 +19,7 @@ Server::Server(QString serverName)
         }
     });
     if (!localServer->listen(serverName)) {
-        qDebug() << "Unable to start socket server.";
+        // qDebug() << "Unable to start socket server.";
     }else {
         // qDebug() << "Socket server started.";
     }
@@ -35,7 +35,7 @@ void Server::receiveArgv(QLocalSocket* client)
         // qDebug() << "Toggle dashboard received.";
         emit dashReceived();
     }else{
-        qDebug() << cmd << " unknown.";
+        // qDebug() << cmd << " unknown.";
     }
     client->disconnectFromServer();
     client->deleteLater();

@@ -4,7 +4,7 @@
 #include <QtCore>
 #include <QtNetwork>
 #include <QtSystemDetection>
-#include <QDebug>
+
 #include "../socket/imap.h"
 
 class Processor : public QObject

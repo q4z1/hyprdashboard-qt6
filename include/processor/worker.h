@@ -1,5 +1,4 @@
 #include <QtCore>
-#include <QDebug>
 
 class Worker : public QObject {
     Q_OBJECT

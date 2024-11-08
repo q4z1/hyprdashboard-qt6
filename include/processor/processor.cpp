@@ -109,7 +109,9 @@ void Processor::checkUpTime()
         Worker *worker1 = new Worker();
         worker1->moveToThread(thread1);
         connect(worker1, &Worker::error, this, [](QString error)
-                { qDebug() << "worker error:" << error; });
+                { 
+                    // qDebug() << "worker error:" << error;
+                 });
         connect(worker1, &Worker::setResult, this, &Processor::setUpTime);
         connect(thread1, &QThread::started, worker1, [this, temp, worker1]()
                 {
@@ -163,7 +165,9 @@ void Processor::checkDiskSpace()
         Worker *worker1 = new Worker();
         worker1->moveToThread(thread1);
         connect(worker1, &Worker::error, this, [](QString error)
-                { qDebug() << "worker error:" << error; });
+                { 
+                    //qDebug() << "worker error:" << error; 
+                });
         connect(worker1, &Worker::setResult, this, &Processor::setDiskSpace);
         connect(thread1, &QThread::started, worker1, [this, worker1]()
                 {
@@ -219,7 +223,7 @@ void Processor::checkFeeds()
         QObject::connect(&manager, &QNetworkAccessManager::finished,
             this, [=](QNetworkReply *reply) {
                 if (reply->error()) {
-                    qDebug() << reply->errorString();
+                    // qDebug() << reply->errorString();
                     return;
                 }
                 // qDebug() << "request url=" << reply->url();
@@ -255,8 +259,9 @@ void Processor::checkFeeds()
                                 descString += xml.text();
                         }
                     }
-                    if (xml.error() && xml.error() != QXmlStreamReader::PrematureEndOfDocumentError)
-                        qDebug() << "XML ERROR:" << xml.lineNumber() << ": " << xml.errorString();
+                    if (xml.error() && xml.error() != QXmlStreamReader::PrematureEndOfDocumentError){
+                        // qDebug() << "XML ERROR:" << xml.lineNumber() << ": " << xml.errorString();
+                    }    
                     else{
                         setFeed(QVariant(QJsonObject{
                                 {reply->url().toString(), feedsArray}
@@ -298,7 +303,9 @@ void Processor::checkPerformance()
         Worker *worker1 = new Worker();
         worker1->moveToThread(thread1);
         connect(worker1, &Worker::error, this, [](QString error)
-                { qDebug() << "worker error:" << error; });
+                { 
+                    //qDebug() << "worker error:" << error; 
+                });
         connect(worker1, &Worker::setResult, this, &Processor::setTemp);
         connect(thread1, &QThread::started, worker1, [this, temp, worker1]()
                 {
@@ -318,7 +325,9 @@ void Processor::checkPerformance()
         Worker *worker2 = new Worker();
         worker2->moveToThread(thread2);
         connect(worker2, &Worker::error, this, [](QString error)
-                { qDebug() << "worker error:" << error; });
+                { 
+                    //qDebug() << "worker error:" << error; 
+                });
         connect(worker2, &Worker::setResult, this, &Processor::setCpu);
         connect(thread2, &QThread::started, worker2, [this, worker2]()
                 {
@@ -370,7 +379,9 @@ void Processor::checkPerformance()
         Worker *worker3 = new Worker();
         worker3->moveToThread(thread3);
         connect(worker3, &Worker::error, this, [](QString error)
-                { qDebug() << "worker error:" << error; });
+                { 
+                    // qDebug() << "worker error:" << error; 
+                });
         connect(worker3, &Worker::setResult, this, &Processor::setDisk);
         connect(thread3, &QThread::started, worker3, [this, worker3]()
                 {
@@ -427,7 +438,9 @@ void Processor::checkMails()
             Worker *worker = new Worker();
             worker->moveToThread(thread);
             connect(worker, &Worker::error, this, [](QString error)
-                    { qDebug() << "worker error:" << error; });
+                    { 
+                        // qDebug() << "worker error:" << error; 
+                    });
             connect(thread, &QThread::started, worker, [this, provider]()
                     {
                     Imap* imap = new Imap(provider);

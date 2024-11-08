@@ -19,7 +19,8 @@ Imap::Imap(QJsonObject p)
 
   QObject::connect(imapSocket, &QTcpSocket::errorOccurred, [this]()
                    { 
-                    qDebug() << "imapSocket error" << "with" << provider["server"].toString() << ":" << error; });
+                    // qDebug() << "imapSocket error" << "with" << provider["server"].toString() << ":" << error; 
+                  });
 }
 
 void Imap::run()
@@ -35,8 +36,8 @@ void Imap::run()
   }
   if (!Login())
   {
-    qDebug() << "Imap login to" << provider["server"].toString() << provider["port"].toString() << " failed:";
-    qDebug() << response;
+    // qDebug() << "Imap login to" << provider["server"].toString() << provider["port"].toString() << " failed:";
+    // qDebug() << response;
     imapSocket->close();
     imapSocket->deleteLater();
   }

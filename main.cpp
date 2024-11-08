@@ -14,8 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <QDebug>
-
 #include <include/config/globals.h>
 #include <include/config/settings.h>
 #include <include/socket/client.h>
@@ -66,7 +64,7 @@ int main(int argc, char *argv[])
     if (isRunning && argc > 1 && !isServer)
     {
         localClient->sendArgv(argc, argv);
-        qDebug("OK");
+        // qDebug("OK");
         app.quit();
     }
 
@@ -114,7 +112,7 @@ int main(int argc, char *argv[])
 
     if (isRunning && isServer)
     {
-        qDebug("Server already running.");
+        // qDebug("Server already running.");
         return -1;
     }
 
